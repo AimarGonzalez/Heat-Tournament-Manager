@@ -12,9 +12,17 @@ interface ColorPickerProps {
     value: string | null;
     onChange: (color: string | null) => void;
     availableColors: ColorOption[];
+    tableColors: Array<string | null>; // All colors currently used in the table
+    currentIndex: number; // Current index in the table
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, availableColors }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({
+    value,
+    onChange,
+    availableColors,
+    tableColors,
+    currentIndex
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +45,22 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, availableCol
         return availableColors.find(color => color.value === value) || null;
     };
 
+    // Filter out colors that are already used in this table (except for the current position's color)
+    const getAvailableColors = () => {
+        // Get all colors currently used in the table except for the current position
+        const usedColors = new Set<string>();
+        tableColors.forEach((color, index) => {
+            if (color && index !== currentIndex) {
+                usedColors.add(color);
+            }
+        });
+
+        // Return only colors that aren't already used
+        return availableColors.filter(color => !usedColors.has(color.value));
+    };
+
     const selectedColor = getSelectedColor();
+    const filteredColors = getAvailableColors();
 
     return (
         <div className="custom-color-picker" ref={dropdownRef}>
@@ -56,7 +79,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, availableCol
 
                 <Dropdown.Menu style={{ width: '100%' }}>
                     <div className="color-grid">
-                        {availableColors.map(color => (
+                        {filteredColors.map(color => (
                             <div
                                 key={color.value}
                                 className={`color-item ${value === color.value ? 'active' : ''}`}

@@ -126,8 +126,44 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
             return positions;
         };
 
+        // Generate random colors for each table while preserving existing selections
+        const getRandomColorsPreservingExisting = (existingColors: Array<string | null>) => {
+            // Keep track of already used colors in this table
+            const usedColors = new Set(existingColors.filter(Boolean));
+
+            // Create a copy of the existing colors to preserve them
+            const newColors = [...existingColors];
+
+            // Get all available colors that aren't already used
+            const availableColorValues = availableColors
+                .map(c => c.value)
+                .filter(color => !usedColors.has(color));
+
+            // Shuffle the remaining available colors
+            const shuffledRemainingColors = [...availableColorValues];
+            for (let i = shuffledRemainingColors.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledRemainingColors[i], shuffledRemainingColors[j]] =
+                    [shuffledRemainingColors[j], shuffledRemainingColors[i]];
+            }
+
+            // Assign random colors only to positions that don't already have a color
+            let colorIndex = 0;
+            for (let i = 0; i < newColors.length; i++) {
+                if (!newColors[i] && colorIndex < shuffledRemainingColors.length) {
+                    newColors[i] = shuffledRemainingColors[colorIndex++];
+                }
+            }
+
+            return newColors;
+        };
+
         const table1Positions = getRandomPositions();
         const table2Positions = getRandomPositions();
+
+        // Preserve existing color selections and randomize only the unassigned ones
+        const table1Colors = getRandomColorsPreservingExisting(tables[0].playerColors);
+        const table2Colors = getRandomColorsPreservingExisting(tables[1].playerColors);
 
         // Create new tables with random assignments
         const newTables: TableAssignment[] = [
@@ -135,13 +171,13 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                 tableId: 'table1',
                 playerSlots: table1Players,
                 positions: table1Positions,
-                playerColors: Array(6).fill(null)
+                playerColors: table1Colors
             },
             {
                 tableId: 'table2',
                 playerSlots: table2Players,
                 positions: table2Positions,
-                playerColors: Array(6).fill(null)
+                playerColors: table2Colors
             }
         ];
 
@@ -242,6 +278,21 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         return tournament.players.filter(player => !assignedPlayers.has(player.id));
     };
 
+    // Get available positions for a given table and slot
+    const getAvailablePositions = (tableIndex: number, slotIndex: number) => {
+        const usedPositions = new Set<number>();
+
+        // Get all currently assigned positions in this table except for the current slot
+        tables[tableIndex].positions.forEach((position, index) => {
+            if (position !== null && index !== slotIndex) {
+                usedPositions.add(position);
+            }
+        });
+
+        // Return positions that aren't already assigned
+        return [1, 2, 3, 4, 5, 6].filter(pos => !usedPositions.has(pos));
+    };
+
     return (
         <Card>
             <Card.Header className="d-flex justify-content-between align-items-center">
@@ -327,6 +378,8 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                                 color
                                                             )}
                                                             availableColors={availableColors}
+                                                            tableColors={table.playerColors}
+                                                            currentIndex={slotIndex}
                                                         />
                                                     </td>
                                                     <td>
@@ -340,11 +393,20 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                             className="position-select"
                                                         >
                                                             <option value="" className="position-placeholder">Select position</option>
-                                                            {[1, 2, 3, 4, 5, 6].map(pos => (
+                                                            {getAvailablePositions(tableIndex, slotIndex).map(pos => (
                                                                 <option key={pos} value={pos}>
                                                                     {pos}{pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th'}
                                                                 </option>
                                                             ))}
+                                                            {/* If this slot already has a position selected, include it in options */}
+                                                            {table.positions[slotIndex] && !getAvailablePositions(tableIndex, slotIndex)
+                                                                .includes(table.positions[slotIndex] as number) && (
+                                                                    <option value={table.positions[slotIndex]}>
+                                                                        {table.positions[slotIndex]}{table.positions[slotIndex] === 1 ? 'st' :
+                                                                            table.positions[slotIndex] === 2 ? 'nd' :
+                                                                                table.positions[slotIndex] === 3 ? 'rd' : 'th'}
+                                                                    </option>
+                                                                )}
                                                         </Form.Select>
                                                     </td>
                                                 </tr>
