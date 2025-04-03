@@ -1,0 +1,82 @@
+.custom-color-picker {
+    position: relative;
+}
+
+.custom-color-picker .dropdown-toggle {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    height: 38px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Add a subtle border around the selected color square */
+.custom-color-picker .dropdown-toggle img {
+    border: 2px solid #b7b7b7;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.custom-color-picker .dropdown-toggle::after {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.custom-color-picker .dropdown-toggle:hover,
+.custom-color-picker .dropdown-toggle:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-color-picker .dropdown-menu {
+    padding: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    min-width: 100%;
+    width: auto !important;
+}
+
+.color-placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Grid layout for color squares */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 5px;
+}
+
+.color-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.color-item:hover {
+    background-color: #f8f9fa;
+}
+
+.color-item.active {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.custom-color-picker .dropdown-item {
+    text-align: center;
+}

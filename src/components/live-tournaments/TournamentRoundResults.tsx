@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament, TournamentRound, GameResult, Player } from '../../models/types';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
+import ColorPicker from './ColorPicker';
 import './TournamentRoundResults.css';
 
 interface TournamentRoundResultsProps {
@@ -318,29 +319,15 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                         </Form.Select>
                                                     </td>
                                                     <td>
-                                                        <Form.Select
-                                                            value={table.playerColors[slotIndex] || ''}
-                                                            onChange={(e) => handleColorChange(
+                                                        <ColorPicker
+                                                            value={table.playerColors[slotIndex]}
+                                                            onChange={(color) => handleColorChange(
                                                                 tableIndex,
                                                                 slotIndex,
-                                                                e.target.value || null
+                                                                color
                                                             )}
-                                                            className={table.playerColors[slotIndex] ?
-                                                                `color-select color-${table.playerColors[slotIndex]}` :
-                                                                'color-select'
-                                                            }
-                                                        >
-                                                            <option value="" className="color-placeholder">Select color</option>
-                                                            {availableColors.map(color => (
-                                                                <option
-                                                                    key={color.value}
-                                                                    value={color.value}
-                                                                    className={`color-option color-${color.value}`}
-                                                                >
-                                                                    {"\u25A0"}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Select>
+                                                            availableColors={availableColors}
+                                                        />
                                                     </td>
                                                     <td>
                                                         <Form.Select

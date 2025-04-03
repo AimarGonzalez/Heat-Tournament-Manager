@@ -16,6 +16,8 @@
     /* Smaller padding on the right for the dropdown arrow */
     font-size: 1rem;
     line-height: 1.5;
+    color: #adb5bd;
+    /* Default gray color for unselected state */
 }
 
 /* Make sure the player names don't get cut off */
@@ -36,67 +38,25 @@
 
 /* Color select default styling */
 .color-select {
-    text-align: center;
+    text-align: left;
     font-size: 1rem;
     color: #adb5bd;
     /* Default gray color when no color selected */
 }
 
-/* Color option styles */
-.color-option {
-    text-align: center;
-    font-size: 1.5rem;
-    line-height: 1;
+/* Change the color of Form.Select when it has a selected value */
+.form-select:has(option:checked:not([value=""])) {
+    color: #212529;
 }
 
-/* Color styles for options in dropdown */
-.color-option.color-red {
-    color: red;
+/* Make sure dropdown options always have regular text color */
+.form-select option {
+    color: #212529 !important;
 }
 
-.color-option.color-blue {
-    color: blue;
-}
-
-.color-option.color-green {
-    color: green;
-}
-
-.color-option.color-yellow {
-    color: #ffc107;
-}
-
-.color-option.color-black {
-    color: black;
-}
-
-.color-option.color-silver {
-    color: silver;
-}
-
-/* Override styles when color is selected in the selector */
-.color-select.color-red {
-    color: red;
-}
-
-.color-select.color-blue {
-    color: blue;
-}
-
-.color-select.color-green {
-    color: green;
-}
-
-.color-select.color-yellow {
-    color: #ffc107;
-}
-
-.color-select.color-black {
-    color: black;
-}
-
-.color-select.color-silver {
-    color: silver;
+/* Add padding to the left when color is selected (to make room for the icon) */
+.color-select.ps-4 {
+    color: #212529 !important;
 }
 
 /* Better responsive behavior */
@@ -135,4 +95,5 @@
 .position-select option,
 .color-select option {
     padding: 8px;
+    color: #e6e6e6
 }
