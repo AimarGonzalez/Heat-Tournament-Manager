@@ -1,0 +1,157 @@
+.custom-dropdown-picker {
+    position: relative;
+    z-index: 1;
+}
+
+/* When dropdown is open, increase its z-index */
+.custom-dropdown-picker.dropdown-active {
+    z-index: 2000 !important;
+}
+
+.custom-dropdown-picker .dropdown-toggle {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    height: 32px;
+    /* Match other form controls */
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.9rem;
+}
+
+.custom-dropdown-picker .dropdown-toggle::after {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.custom-dropdown-picker .dropdown-toggle:hover,
+.custom-dropdown-picker .dropdown-toggle:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Make dropdown menus appear above all other content */
+.custom-dropdown-picker .dropdown-menu {
+    padding: 0;
+    max-height: unset;
+    min-width: 100%;
+    width: auto !important;
+    z-index: 2000 !important;
+    /* Higher than Bootstrap's default z-index */
+    position: absolute !important;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* Scrollable area for dropdown options except clear option */
+.custom-dropdown-picker .dropdown-menu .scrollable-menu {
+    max-height: 240px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+/* Apply z-index to the dropdown component itself */
+.dropdown-menu.show {
+    z-index: 2000 !important;
+    display: block !important;
+}
+
+/* Ensure proper positioning of dropdown menu relative to trigger */
+body .dropdown-menu {
+    margin-top: 2px !important;
+}
+
+/* Override any parent overflow settings to ensure dropdowns are visible */
+.table-responsive,
+.card-body.table-responsive,
+.card-body,
+.row,
+.col,
+.card {
+    overflow: visible !important;
+}
+
+/* Make sure table doesn't clip the dropdowns */
+.round-results-table {
+    overflow: visible !important;
+}
+
+.custom-dropdown-picker .dropdown-item {
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.custom-dropdown-picker .dropdown-item:active,
+.custom-dropdown-picker .dropdown-item.active {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.custom-dropdown-picker .dropdown-item:hover {
+    background-color: #e9ecef;
+}
+
+/* Clear option styling to make it always visible */
+.custom-dropdown-picker .dropdown-item.clear-option {
+    font-style: italic;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #dee2e6;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.custom-dropdown-picker .placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Fix clickable area for color grid */
+.custom-color-picker .color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+}
+
+.custom-color-picker .color-item {
+    margin: 0.25rem;
+    cursor: pointer;
+}
+
+/* Fix dropdown positioning for ColorPicker which uses a different class */
+.custom-color-picker {
+    position: relative;
+    z-index: 1;
+}
+
+/* When color picker dropdown is open, increase its z-index */
+.custom-color-picker.dropdown-active {
+    z-index: 2000 !important;
+}
+
+.custom-color-picker .dropdown-menu {
+    padding: 0;
+    max-height: unset;
+    min-width: 100%;
+    width: auto !important;
+    z-index: 2000 !important;
+    position: absolute !important;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

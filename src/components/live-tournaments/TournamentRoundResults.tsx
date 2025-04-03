@@ -5,6 +5,8 @@ import { useAppContext } from '../../context/AppContext';
 import { Tournament, TournamentRound, GameResult, Player } from '../../models/types';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
 import ColorPicker from './ColorPicker';
+import PlayerPicker from './PlayerPicker';
+import PositionPicker from './PositionPicker';
 import './TournamentRoundResults.css';
 
 interface TournamentRoundResultsProps {
@@ -345,29 +347,17 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                 <tr key={slotIndex}>
                                                     <td className="text-center">{slotIndex + 1}</td>
                                                     <td>
-                                                        <Form.Select
-                                                            value={playerId || ''}
-                                                            onChange={(e) => handlePlayerChange(
+                                                        <PlayerPicker
+                                                            value={playerId}
+                                                            onChange={(playerId) => handlePlayerChange(
                                                                 tableIndex,
                                                                 slotIndex,
-                                                                e.target.value || null
+                                                                playerId
                                                             )}
-                                                            className="player-select"
-                                                        >
-                                                            <option value="" className="player-placeholder">Select player</option>
-                                                            {getAvailablePlayers(tableIndex, slotIndex).map(player => (
-                                                                <option key={player.id} value={player.id} title={player.name}>
-                                                                    {player.name}
-                                                                </option>
-                                                            ))}
-                                                            {/* If this slot already has a player selected, include them in options */}
-                                                            {playerId && !getAvailablePlayers(tableIndex, slotIndex)
-                                                                .find(p => p.id === playerId) && (
-                                                                    <option value={playerId} title={tournament.players.find(p => p.id === playerId)?.name}>
-                                                                        {tournament.players.find(p => p.id === playerId)?.name}
-                                                                    </option>
-                                                                )}
-                                                        </Form.Select>
+                                                            players={tournament.players}
+                                                            availablePlayers={getAvailablePlayers(tableIndex, slotIndex)}
+                                                            selectedPlayer={tournament.players.find(p => p.id === playerId)}
+                                                        />
                                                     </td>
                                                     <td>
                                                         <ColorPicker
@@ -383,31 +373,15 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                         />
                                                     </td>
                                                     <td>
-                                                        <Form.Select
-                                                            value={table.positions[slotIndex] || ''}
-                                                            onChange={(e) => handlePositionChange(
+                                                        <PositionPicker
+                                                            value={table.positions[slotIndex]}
+                                                            onChange={(position) => handlePositionChange(
                                                                 tableIndex,
                                                                 slotIndex,
-                                                                e.target.value ? parseInt(e.target.value) : null
+                                                                position
                                                             )}
-                                                            className="position-select"
-                                                        >
-                                                            <option value="" className="position-placeholder">Select position</option>
-                                                            {getAvailablePositions(tableIndex, slotIndex).map(pos => (
-                                                                <option key={pos} value={pos}>
-                                                                    {pos}{pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th'}
-                                                                </option>
-                                                            ))}
-                                                            {/* If this slot already has a position selected, include it in options */}
-                                                            {table.positions[slotIndex] && !getAvailablePositions(tableIndex, slotIndex)
-                                                                .includes(table.positions[slotIndex] as number) && (
-                                                                    <option value={table.positions[slotIndex]}>
-                                                                        {table.positions[slotIndex]}{table.positions[slotIndex] === 1 ? 'st' :
-                                                                            table.positions[slotIndex] === 2 ? 'nd' :
-                                                                                table.positions[slotIndex] === 3 ? 'rd' : 'th'}
-                                                                    </option>
-                                                                )}
-                                                        </Form.Select>
+                                                            availablePositions={getAvailablePositions(tableIndex, slotIndex)}
+                                                        />
                                                     </td>
                                                 </tr>
                                             ))}

@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
 import ColorSquare from './ColorSquare';
 import './ColorPicker.css';
 
@@ -24,19 +23,27 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     currentIndex
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const toggleRef = useRef<HTMLButtonElement>(null);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        function handleOutsideClick(event: MouseEvent) {
+            if (
+                menuRef.current &&
+                toggleRef.current &&
+                !menuRef.current.contains(event.target as Node) &&
+                !toggleRef.current.contains(event.target as Node)
+            ) {
                 setIsOpen(false);
             }
-        };
+        }
 
-        document.addEventListener('mousedown', handleClickOutside);
+        // Add event listener
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        // Clean up
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleOutsideClick);
         };
     }, []);
 
@@ -59,52 +66,62 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         return availableColors.filter(color => !usedColors.has(color.value));
     };
 
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleSelect = (color: string | null) => {
+        onChange(color);
+        setIsOpen(false);
+    };
+
     const selectedColor = getSelectedColor();
     const filteredColors = getAvailableColors();
 
     return (
-        <div className="custom-color-picker" ref={dropdownRef}>
-            <Dropdown show={isOpen} onToggle={(isOpen) => setIsOpen(isOpen)}>
-                <Dropdown.Toggle
-                    variant="light"
-                    className={value ? "d-flex align-items-center" : "text-muted"}
-                    style={{ width: '100%', textAlign: 'left', justifyContent: 'flex-start' }}
-                >
-                    {value ? (
-                        <ColorSquare color={value} size={22} className="me-2" />
-                    ) : (
-                        <span className="color-placeholder">Select</span>
-                    )}
-                </Dropdown.Toggle>
+        <div className={`custom-color-picker ${isOpen ? 'dropdown-active' : ''}`}>
+            <button
+                ref={toggleRef}
+                className={`dropdown-toggle btn btn-light ${value ? "d-flex align-items-center" : "text-muted"}`}
+                onClick={toggleDropdown}
+                style={{ width: '100%', textAlign: 'left', justifyContent: 'flex-start' }}
+            >
+                {value ? (
+                    <ColorSquare color={value} size={22} className="me-2" />
+                ) : (
+                    <span className="color-placeholder">Select</span>
+                )}
+            </button>
 
-                <Dropdown.Menu style={{ width: '100%' }}>
-                    <div className="color-grid">
-                        {filteredColors.map(color => (
-                            <div
-                                key={color.value}
-                                className={`color-item ${value === color.value ? 'active' : ''}`}
-                                onClick={() => {
-                                    onChange(color.value);
-                                    setIsOpen(false);
-                                }}
-                                title={color.name}
-                            >
-                                <ColorSquare color={color.value} size={24} />
-                            </div>
-                        ))}
-                    </div>
-                    <Dropdown.Divider />
-                    <Dropdown.Item
-                        onClick={() => {
-                            onChange(null);
-                            setIsOpen(false);
-                        }}
-                        className="text-muted text-center"
+            {isOpen && (
+                <div
+                    ref={menuRef}
+                    className="dropdown-menu show"
+                    style={{ width: '100%' }}
+                >
+                    <button
+                        className="dropdown-item clear-option"
+                        onClick={() => handleSelect(null)}
                     >
                         Clear
-                    </Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+                    </button>
+
+                    <div className="scrollable-menu">
+                        <div className="color-grid">
+                            {filteredColors.map(color => (
+                                <div
+                                    key={color.value}
+                                    className={`color-item ${value === color.value ? 'active' : ''}`}
+                                    onClick={() => handleSelect(color.value)}
+                                    title={color.name}
+                                >
+                                    <ColorSquare color={color.value} size={24} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
