@@ -2,10 +2,114 @@
 .round-results-table {
     width: 100%;
     table-layout: fixed;
+    margin-bottom: 0;
+    /* Remove bottom margin from tables */
+    border-collapse: collapse;
 }
 
 .round-results-table td {
     vertical-align: middle;
+    padding: 0.25rem;
+    /* Reduce cell padding */
+}
+
+.round-results-table th {
+    padding: 0.25rem;
+    /* Reduce header padding */
+}
+
+/* Table takes full width inside card */
+.table-responsive {
+    width: 100%;
+}
+
+/* No margin on the table bottom row */
+.mb-4 {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Remove ALL card padding in the tournament round results */
+.card {
+    margin-bottom: 0;
+}
+
+/* Main outer card */
+.card>.card-body {
+    padding: 1em;
+}
+
+/* Inner cards (tables) */
+.card>.card-body .card {
+    border-radius: 3;
+}
+
+.card-body {
+    padding: 0;
+}
+
+.card-header {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Table container needs zero padding */
+.table-responsive {
+    padding: 0;
+}
+
+/* No margin between table rows */
+tr {
+    margin: 0;
+}
+
+/* No margin between columns */
+.col,
+[class*="col-"] {
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
+}
+
+/* Remove margin from last column */
+.col:last-child,
+[class*="col-"]:last-child {
+    padding-right: 0;
+}
+
+/* Remove margin from first column */
+.col:first-child,
+[class*="col-"]:first-child {
+    padding-left: 0;
+}
+
+/* Adjust row margins */
+.row {
+    margin-right: 0;
+    margin-left: 0;
+    width: 100%;
+}
+
+.card>.card-body>.row {
+    margin: 0;
+}
+
+/* Compact form controls */
+.form-select,
+.form-control {
+    padding: 0.25rem 0.5rem;
+    min-height: 32px;
+    height: 32px;
+}
+
+/* Add minimal padding to the submit button area */
+.card>.card-body>.d-grid {
+    margin: 0.5rem;
+}
+
+/* Add minimal margin to error alerts */
+.card>.card-body>.alert {
+    margin: 0.5rem;
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
 }
 
 /* Remove unnecessary padding in dropdown selectors */
@@ -13,9 +117,8 @@
 .position-select,
 .color-select {
     padding-right: 25px;
-    /* Smaller padding on the right for the dropdown arrow */
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.3;
     color: #adb5bd;
     /* Default gray color for unselected state */
 }
@@ -32,16 +135,14 @@
 .position-placeholder,
 .player-placeholder {
     color: #adb5bd;
-    /* Lighter gray for placeholder text */
     font-style: italic;
 }
 
 /* Color select default styling */
 .color-select {
     text-align: left;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #adb5bd;
-    /* Default gray color when no color selected */
 }
 
 /* Change the color of Form.Select when it has a selected value */
@@ -69,11 +170,11 @@
 /* Make dropdowns more readable on small screens */
 @media (max-width: 767px) {
     .round-results-table colgroup col:nth-child(1) {
-        width: 12% !important;
+        width: 8% !important;
     }
 
     .round-results-table colgroup col:nth-child(2) {
-        width: 38% !important;
+        width: 42% !important;
     }
 
     .round-results-table colgroup col:nth-child(3) {
@@ -94,6 +195,6 @@
 .player-select option,
 .position-select option,
 .color-select option {
-    padding: 8px;
-    color: #e6e6e6
+    padding: 0.25rem;
+    color: #e6e6e6;
 }
