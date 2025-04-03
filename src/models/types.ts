@@ -25,6 +25,7 @@ export interface TournamentRound {
         [tableId: string]: {
             players: string[]; // Player IDs at this table
             results: GameResult[];
+            playerColors?: { [playerId: string]: string }; // Colors used by players in this table
         }
     };
     difficultyBonus?: { [playerId: string]: number }; // Calculated difficulty bonus for this round

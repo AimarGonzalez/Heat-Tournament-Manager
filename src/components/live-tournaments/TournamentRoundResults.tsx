@@ -22,26 +22,114 @@ interface TableAssignment {
     playerColors: Array<string | null>; // Colors for players, null if not assigned
 }
 
+const AUTO_BACKUP_KEY = 'tournament_round_draft';
+
 function TournamentRoundResults({ tournament, roundNumber, onComplete }: TournamentRoundResultsProps) {
     const { updateTournament } = useAppContext();
-    const [tables, setTables] = useState<TableAssignment[]>([
-        {
-            tableId: 'table1',
-            playerSlots: Array(6).fill(null),
-            positions: Array(6).fill(null),
-            playerColors: Array(6).fill(null)
-        },
-        {
-            tableId: 'table2',
-            playerSlots: Array(6).fill(null),
-            positions: Array(6).fill(null),
-            playerColors: Array(6).fill(null)
-        }
-    ]);
+    const [tables, setTables] = useState<TableAssignment[]>(() => {
+        return initializeTables(tournament, roundNumber);
+    });
+
     const [errors, setErrors] = useState({
         playerAssignment: false,
         positions: false
     });
+
+    // Reset tables when tournament or round changes
+    useEffect(() => {
+        setTables(initializeTables(tournament, roundNumber));
+    }, [tournament.id, roundNumber]);
+
+    // Function to initialize tables from tournament data or localStorage
+    function initializeTables(tournament: Tournament, roundNumber: number): TableAssignment[] {
+        // Try to load from localStorage first
+        const savedData = localStorage.getItem(`${AUTO_BACKUP_KEY}_${tournament.id}_${roundNumber}`);
+        if (savedData) {
+            try {
+                return JSON.parse(savedData);
+            } catch (e) {
+                console.error('Failed to parse saved table data', e);
+            }
+        }
+
+        // Check if there's existing data in the tournament for this round
+        const existingRound = tournament.rounds.find(r => r.roundNumber === roundNumber);
+        if (existingRound) {
+            const table1 = existingRound.tables['table1'];
+            const table2 = existingRound.tables['table2'];
+
+            const table1Assignment: TableAssignment = {
+                tableId: 'table1',
+                playerSlots: Array(6).fill(null),
+                positions: Array(6).fill(null),
+                playerColors: Array(6).fill(null)
+            };
+
+            const table2Assignment: TableAssignment = {
+                tableId: 'table2',
+                playerSlots: Array(6).fill(null),
+                positions: Array(6).fill(null),
+                playerColors: Array(6).fill(null)
+            };
+
+            // Fill in player slots, positions, and colors from existing data
+            if (table1) {
+                table1.results.forEach(result => {
+                    const idx = table1Assignment.playerSlots.indexOf(null);
+                    if (idx >= 0) {
+                        table1Assignment.playerSlots[idx] = result.playerId;
+                        table1Assignment.positions[idx] = result.position;
+
+                        // Get color if available
+                        if (table1.playerColors && table1.playerColors[result.playerId]) {
+                            table1Assignment.playerColors[idx] = table1.playerColors[result.playerId];
+                        }
+                    }
+                });
+            }
+
+            if (table2) {
+                table2.results.forEach(result => {
+                    const idx = table2Assignment.playerSlots.indexOf(null);
+                    if (idx >= 0) {
+                        table2Assignment.playerSlots[idx] = result.playerId;
+                        table2Assignment.positions[idx] = result.position;
+
+                        // Get color if available
+                        if (table2.playerColors && table2.playerColors[result.playerId]) {
+                            table2Assignment.playerColors[idx] = table2.playerColors[result.playerId];
+                        }
+                    }
+                });
+            }
+
+            return [table1Assignment, table2Assignment];
+        }
+
+        // Default initial state if no saved data or existing round
+        return [
+            {
+                tableId: 'table1',
+                playerSlots: Array(6).fill(null),
+                positions: Array(6).fill(null),
+                playerColors: Array(6).fill(null)
+            },
+            {
+                tableId: 'table2',
+                playerSlots: Array(6).fill(null),
+                positions: Array(6).fill(null),
+                playerColors: Array(6).fill(null)
+            }
+        ];
+    }
+
+    // Auto-backup tables state to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem(
+            `${AUTO_BACKUP_KEY}_${tournament.id}_${roundNumber}`,
+            JSON.stringify(tables)
+        );
+    }, [tables, tournament.id, roundNumber]);
 
     // Available colors for the color picker
     const availableColors = [
@@ -209,6 +297,7 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         // Process each table
         tables.forEach(table => {
             const results: GameResult[] = [];
+            const playerColors: { [playerId: string]: string } = {};
 
             // Create game results for each player at the table
             table.playerSlots.forEach((playerId, index) => {
@@ -219,12 +308,18 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                         position,
                         points: calculatePointsFromPosition(position)
                     });
+
+                    // Save player color if available
+                    if (table.playerColors[index]) {
+                        playerColors[playerId] = table.playerColors[index] as string;
+                    }
                 }
             });
 
             roundResults.tables[table.tableId] = {
                 players: table.playerSlots.filter(Boolean) as string[],
-                results
+                results,
+                playerColors // Add colors to the tournament data
             };
         });
 
@@ -259,6 +354,9 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                 );
             });
         }
+
+        // Clear the auto-backup data when successfully submitting
+        localStorage.removeItem(`${AUTO_BACKUP_KEY}_${tournament.id}_${roundNumber}`);
 
         updateTournament(updatedTournament);
         onComplete();
