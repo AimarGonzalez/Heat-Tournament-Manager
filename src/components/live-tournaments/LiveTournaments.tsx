@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, ListGroup, Row, Col, Alert } from 'react-bootstrap';
+import { Button, Card, ListGroup, Row, Col, Alert, Nav } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament } from '../../models/types';
 import TournamentPlayerInscription from './TournamentPlayerInscription';
@@ -85,6 +85,33 @@ function LiveTournaments() {
         }
     };
 
+    // Determine available navigation options based on tournament state
+    const getAvailableViews = () => {
+        if (!activeTournament) return [];
+
+        const views = [];
+
+        // Players inscription is always available
+        views.push({ id: 'inscription', label: 'Players' });
+
+        // Round 1 is available if there are players
+        if (activeTournament.players.length > 0) {
+            views.push({ id: 'round1', label: 'Round 1' });
+        }
+
+        // Round 2 is available if round 1 is completed
+        if (activeTournament.rounds.length >= 1) {
+            views.push({ id: 'round2', label: 'Round 2' });
+        }
+
+        // Results are available if round 2 is completed
+        if (activeTournament.rounds.length >= 2) {
+            views.push({ id: 'results', label: 'Final Results' });
+        }
+
+        return views;
+    };
+
     return (
         <div className="tournament-container">
             <Row>
@@ -152,8 +179,27 @@ function LiveTournaments() {
                 <Col lg={9} className="content-column">
                     {activeTournament ? (
                         <>
+                            {/* Navigation tabs for tournament sections */}
+                            <Card className="mb-3">
+                                <Card.Body className="p-2">
+                                    <Nav variant="tabs" className="tournament-nav">
+                                        {getAvailableViews().map(view => (
+                                            <Nav.Item key={view.id}>
+                                                <Nav.Link
+                                                    active={activeTournamentView === view.id}
+                                                    onClick={() => setActiveTournamentView(view.id as any)}
+                                                >
+                                                    {view.label}
+                                                </Nav.Link>
+                                            </Nav.Item>
+                                        ))}
+                                    </Nav>
+                                </Card.Body>
+                            </Card>
+
                             {activeTournamentView === 'inscription' && (
                                 <TournamentPlayerInscription
+                                    key={`inscription-${activeTournament.id}`}
                                     tournament={activeTournament}
                                     onComplete={() => setActiveTournamentView('round1')}
                                 />
@@ -161,22 +207,29 @@ function LiveTournaments() {
 
                             {activeTournamentView === 'round1' && (
                                 <TournamentRoundResults
+                                    key={`round1-${activeTournament.id}`}
                                     tournament={activeTournament}
                                     roundNumber={1}
                                     onComplete={() => setActiveTournamentView('round2')}
+                                    isEdit={activeTournament.rounds.length >= 1}
                                 />
                             )}
 
                             {activeTournamentView === 'round2' && (
                                 <TournamentRoundResults
+                                    key={`round2-${activeTournament.id}`}
                                     tournament={activeTournament}
                                     roundNumber={2}
                                     onComplete={() => setActiveTournamentView('results')}
+                                    isEdit={activeTournament.rounds.length >= 2}
                                 />
                             )}
 
                             {activeTournamentView === 'results' && (
-                                <TournamentResultsTable tournament={activeTournament} />
+                                <TournamentResultsTable
+                                    key={`results-${activeTournament.id}`}
+                                    tournament={activeTournament}
+                                />
                             )}
                         </>
                     ) : (

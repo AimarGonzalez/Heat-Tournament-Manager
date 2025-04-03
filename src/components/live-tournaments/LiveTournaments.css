@@ -1,5 +1,6 @@
 .tournament-container {
     margin: 0;
+    height: 100%;
 }
 
 /* Sidebar styling */
@@ -7,21 +8,22 @@
     padding-right: 20px;
     border-right: 1px solid #e9ecef;
     min-height: 100%;
+    margin-bottom: 20px;
 }
 
 .tournament-list-card {
-    height: calc(100% - 50px);
-    margin-bottom: 0;
+    height: 100%;
 }
 
 .tournament-list {
-    max-height: 500px;
+    max-height: calc(100vh - 180px);
     overflow-y: auto;
 }
 
 .tournament-info {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    padding-right: 10px;
 }
 
 .tournament-name {
@@ -29,18 +31,44 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 160px;
 }
 
 .tournament-date {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #6c757d;
-    margin-top: 2px;
 }
 
 /* Content area styling */
 .content-column {
     padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tab navigation styles */
+.tournament-nav {
+    border-bottom: none;
+}
+
+.tournament-nav .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    color: #495057;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tournament-nav .nav-link.active {
+    color: #007bff;
+    background-color: transparent;
+    border-color: #dee2e6 #dee2e6 #fff;
+    font-weight: 500;
+}
+
+.tournament-nav .nav-link:hover:not(.active) {
+    background-color: rgba(0, 123, 255, 0.05);
+    border-color: transparent;
 }
 
 /* Responsive layout */

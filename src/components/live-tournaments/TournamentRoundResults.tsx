@@ -13,6 +13,7 @@ interface TournamentRoundResultsProps {
     tournament: Tournament;
     roundNumber: number;
     onComplete: () => void;
+    isEdit?: boolean; // Flag to indicate we're editing an existing round
 }
 
 interface TableAssignment {
@@ -24,7 +25,7 @@ interface TableAssignment {
 
 const AUTO_BACKUP_KEY = 'tournament_round_draft';
 
-function TournamentRoundResults({ tournament, roundNumber, onComplete }: TournamentRoundResultsProps) {
+function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = false }: TournamentRoundResultsProps) {
     const { updateTournament } = useAppContext();
     const [tables, setTables] = useState<TableAssignment[]>(() => {
         return initializeTables(tournament, roundNumber);
@@ -326,33 +327,57 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         // Clone players for updates
         const updatedPlayers = [...tournament.players];
 
-        // Create a base tournament update with the new round added
-        let updatedTournament = {
-            ...tournament,
-            players: updatedPlayers,
-            rounds: [...tournament.rounds, roundResults],
-            completed: roundNumber === 2
-        };
+        let updatedTournament: Tournament;
 
-        if (roundNumber === 2) {
-            // For Round 2 (final round), recalculate all bonuses with final mastery values
+        if (isEdit) {
+            // When editing an existing round, replace it in the tournament
+            const updatedRounds = [...tournament.rounds];
+            const roundIndex = updatedRounds.findIndex(r => r.roundNumber === roundNumber);
+
+            if (roundIndex !== -1) {
+                updatedRounds[roundIndex] = roundResults;
+            } else {
+                // Shouldn't happen, but just in case
+                updatedRounds.push(roundResults);
+            }
+
+            updatedTournament = {
+                ...tournament,
+                players: updatedPlayers,
+                rounds: updatedRounds
+            };
+
+            // Always recalculate bonuses after editing
             updatedTournament = calculateFinalBonuses(updatedTournament);
         } else {
-            // For Round 1, initialize difficulty bonus for this round only
-            // We'll set mastery to 0 for all players
-            updatedPlayers.forEach(player => {
-                player.mastery = 0;
-            });
+            // For new rounds, add to existing rounds
+            updatedTournament = {
+                ...tournament,
+                players: updatedPlayers,
+                rounds: [...tournament.rounds, roundResults],
+                completed: roundNumber === 2
+            };
 
-            // Calculate temporary difficulty bonus for Round 1
-            roundResults.difficultyBonus = {};
-            tournament.players.forEach(player => {
-                roundResults.difficultyBonus![player.id] = calculateDifficultyBonus(
-                    player.id,
-                    roundResults,
-                    updatedPlayers
-                );
-            });
+            if (roundNumber === 2) {
+                // For Round 2 (final round), recalculate all bonuses with final mastery values
+                updatedTournament = calculateFinalBonuses(updatedTournament);
+            } else {
+                // For Round 1, initialize difficulty bonus for this round only
+                // We'll set mastery to 0 for all players
+                updatedPlayers.forEach(player => {
+                    player.mastery = 0;
+                });
+
+                // Calculate temporary difficulty bonus for Round 1
+                roundResults.difficultyBonus = {};
+                tournament.players.forEach(player => {
+                    roundResults.difficultyBonus![player.id] = calculateDifficultyBonus(
+                        player.id,
+                        roundResults,
+                        updatedPlayers
+                    );
+                });
+            }
         }
 
         // Clear the auto-backup data when successfully submitting
@@ -393,10 +418,18 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         return [1, 2, 3, 4, 5, 6].filter(pos => !usedPositions.has(pos));
     };
 
+    // Calculate submit button text based on edit mode
+    const getSubmitButtonText = () => {
+        if (isEdit) {
+            return `Update Round ${roundNumber} Results`;
+        }
+        return `Submit Round ${roundNumber} Results`;
+    };
+
     return (
         <Card>
             <Card.Header className="d-flex justify-content-between align-items-center">
-                <span>Round {roundNumber} Results</span>
+                <span>{isEdit ? `Edit Round ${roundNumber} Results` : `Round ${roundNumber} Results`}</span>
                 <Button
                     variant="outline-primary"
                     size="sm"
@@ -496,7 +529,7 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                         variant="primary"
                         onClick={handleSubmit}
                     >
-                        Submit Round {roundNumber} Results
+                        {getSubmitButtonText()}
                     </Button>
                 </div>
             </Card.Body>
