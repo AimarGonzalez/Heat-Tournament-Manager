@@ -14,8 +14,10 @@ function LiveTournaments() {
     const [activeTournamentView, setActiveTournamentView] = useState<'inscription' | 'round1' | 'round2' | 'results'>('inscription');
     const [showRecoveryMessage, setShowRecoveryMessage] = useState(false);
 
-    // Filter only live tournaments (not simulations)
-    const liveTournaments = state.tournaments.filter(t => t.type === 'live');
+    // Filter only live tournaments (not simulations) and sort by date (newest first)
+    const liveTournaments = state.tournaments
+        .filter(t => t.type === 'live')
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     // Check if we need to show the recovery message
     useEffect(() => {
@@ -26,6 +28,22 @@ function LiveTournaments() {
             setShowRecoveryMessage(false);
         }
     }, [state.tournaments.length]);
+
+    // Format date for display
+    const formatDate = (dateString: string): string => {
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (e) {
+            return dateString;
+        }
+    };
 
     const handleCreateNewTournament = () => {
         const newTournament = createTournament(
@@ -110,9 +128,12 @@ function LiveTournaments() {
                                             action
                                             active={activeTournament?.id === tournament.id}
                                             onClick={() => handleSelectTournament(tournament)}
-                                            className="d-flex justify-content-between align-items-center"
+                                            className="d-flex justify-content-between align-items-start"
                                         >
-                                            <span className="tournament-name">{tournament.name}</span>
+                                            <div className="tournament-info">
+                                                <div className="tournament-name">{tournament.name}</div>
+                                                <div className="tournament-date">{formatDate(tournament.date)}</div>
+                                            </div>
                                             <Button
                                                 variant="outline-danger"
                                                 size="sm"

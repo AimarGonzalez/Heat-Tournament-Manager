@@ -10,9 +10,12 @@
 
 /* Remove unnecessary padding in dropdown selectors */
 .player-select,
-.position-select {
+.position-select,
+.color-select {
     padding-right: 25px;
     /* Smaller padding on the right for the dropdown arrow */
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 /* Make sure the player names don't get cut off */
@@ -20,6 +23,80 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+/* Placeholder styling */
+.color-placeholder,
+.position-placeholder,
+.player-placeholder {
+    color: #adb5bd;
+    /* Lighter gray for placeholder text */
+    font-style: italic;
+}
+
+/* Color select default styling */
+.color-select {
+    text-align: center;
+    font-size: 1rem;
+    color: #adb5bd;
+    /* Default gray color when no color selected */
+}
+
+/* Color option styles */
+.color-option {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Color styles for options in dropdown */
+.color-option.color-red {
+    color: red;
+}
+
+.color-option.color-blue {
+    color: blue;
+}
+
+.color-option.color-green {
+    color: green;
+}
+
+.color-option.color-yellow {
+    color: #ffc107;
+}
+
+.color-option.color-black {
+    color: black;
+}
+
+.color-option.color-silver {
+    color: silver;
+}
+
+/* Override styles when color is selected in the selector */
+.color-select.color-red {
+    color: red;
+}
+
+.color-select.color-blue {
+    color: blue;
+}
+
+.color-select.color-green {
+    color: green;
+}
+
+.color-select.color-yellow {
+    color: #ffc107;
+}
+
+.color-select.color-black {
+    color: black;
+}
+
+.color-select.color-silver {
+    color: silver;
 }
 
 /* Better responsive behavior */
@@ -32,15 +109,19 @@
 /* Make dropdowns more readable on small screens */
 @media (max-width: 767px) {
     .round-results-table colgroup col:nth-child(1) {
-        width: 15% !important;
+        width: 12% !important;
     }
 
     .round-results-table colgroup col:nth-child(2) {
-        width: 50% !important;
+        width: 38% !important;
     }
 
     .round-results-table colgroup col:nth-child(3) {
-        width: 35% !important;
+        width: 25% !important;
+    }
+
+    .round-results-table colgroup col:nth-child(4) {
+        width: 25% !important;
     }
 }
 
@@ -51,6 +132,7 @@
 
 /* Custom styling for select elements to show more text */
 .player-select option,
-.position-select option {
+.position-select option,
+.color-select option {
     padding: 8px;
 }

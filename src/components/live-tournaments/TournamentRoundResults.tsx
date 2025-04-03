@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, Form, Button, Row, Col, Table, Modal, Alert } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
-import { Tournament, TournamentRound, GameResult, Player, Round, TableResult } from '../../models/types';
+import { Tournament, TournamentRound, GameResult, Player } from '../../models/types';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
 import './TournamentRoundResults.css';
 
@@ -16,6 +16,7 @@ interface TableAssignment {
     tableId: string;
     playerSlots: Array<string | null>; // Player IDs, null if not assigned
     positions: Array<number | null>; // Positions 1-6, null if not assigned
+    playerColors: Array<string | null>; // Colors for players, null if not assigned
 }
 
 function TournamentRoundResults({ tournament, roundNumber, onComplete }: TournamentRoundResultsProps) {
@@ -24,18 +25,30 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         {
             tableId: 'table1',
             playerSlots: Array(6).fill(null),
-            positions: Array(6).fill(null)
+            positions: Array(6).fill(null),
+            playerColors: Array(6).fill(null)
         },
         {
             tableId: 'table2',
             playerSlots: Array(6).fill(null),
-            positions: Array(6).fill(null)
+            positions: Array(6).fill(null),
+            playerColors: Array(6).fill(null)
         }
     ]);
     const [errors, setErrors] = useState({
         playerAssignment: false,
         positions: false
     });
+
+    // Available colors for the color picker
+    const availableColors = [
+        { name: 'Red', value: 'red' },
+        { name: 'Blue', value: 'blue' },
+        { name: 'Green', value: 'green' },
+        { name: 'Yellow', value: 'yellow' },
+        { name: 'Black', value: 'black' },
+        { name: 'Silver', value: 'silver' }
+    ];
 
     // Check if each player is assigned to exactly one table
     const validatePlayerAssignment = () => {
@@ -83,6 +96,12 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
         setTables(newTables);
     };
 
+    const handleColorChange = (tableIndex: number, slotIndex: number, color: string | null) => {
+        const newTables = [...tables];
+        newTables[tableIndex].playerColors[slotIndex] = color;
+        setTables(newTables);
+    };
+
     // Randomly assign players to tables and positions
     const handleRandomize = () => {
         // Make a copy of all player IDs and shuffle them
@@ -114,12 +133,14 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
             {
                 tableId: 'table1',
                 playerSlots: table1Players,
-                positions: table1Positions
+                positions: table1Positions,
+                playerColors: Array(6).fill(null)
             },
             {
                 tableId: 'table2',
                 playerSlots: table2Players,
-                positions: table2Positions
+                positions: table2Positions,
+                playerColors: Array(6).fill(null)
             }
         ];
 
@@ -254,14 +275,16 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                 <Card.Body className="table-responsive">
                                     <Table bordered hover className="round-results-table">
                                         <colgroup>
-                                            <col style={{ width: "10%" }} />
-                                            <col style={{ width: "60%" }} />
-                                            <col style={{ width: "30%" }} />
+                                            <col style={{ width: "8%" }} />
+                                            <col style={{ width: "42%" }} />
+                                            <col style={{ width: "25%" }} />
+                                            <col style={{ width: "25%" }} />
                                         </colgroup>
                                         <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Player</th>
+                                                <th>Color</th>
                                                 <th>Position</th>
                                             </tr>
                                         </thead>
@@ -279,7 +302,7 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                             )}
                                                             className="player-select"
                                                         >
-                                                            <option value="">Select player</option>
+                                                            <option value="" className="player-placeholder">Select player</option>
                                                             {getAvailablePlayers(tableIndex, slotIndex).map(player => (
                                                                 <option key={player.id} value={player.id} title={player.name}>
                                                                     {player.name}
@@ -296,16 +319,40 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete }: Tournam
                                                     </td>
                                                     <td>
                                                         <Form.Select
+                                                            value={table.playerColors[slotIndex] || ''}
+                                                            onChange={(e) => handleColorChange(
+                                                                tableIndex,
+                                                                slotIndex,
+                                                                e.target.value || null
+                                                            )}
+                                                            className={table.playerColors[slotIndex] ?
+                                                                `color-select color-${table.playerColors[slotIndex]}` :
+                                                                'color-select'
+                                                            }
+                                                        >
+                                                            <option value="" className="color-placeholder">Select color</option>
+                                                            {availableColors.map(color => (
+                                                                <option
+                                                                    key={color.value}
+                                                                    value={color.value}
+                                                                    className={`color-option color-${color.value}`}
+                                                                >
+                                                                    {"\u25A0"}
+                                                                </option>
+                                                            ))}
+                                                        </Form.Select>
+                                                    </td>
+                                                    <td>
+                                                        <Form.Select
                                                             value={table.positions[slotIndex] || ''}
                                                             onChange={(e) => handlePositionChange(
                                                                 tableIndex,
                                                                 slotIndex,
                                                                 e.target.value ? parseInt(e.target.value) : null
                                                             )}
-                                                            disabled={!playerId}
                                                             className="position-select"
                                                         >
-                                                            <option value="">Select position</option>
+                                                            <option value="" className="position-placeholder">Select position</option>
                                                             {[1, 2, 3, 4, 5, 6].map(pos => (
                                                                 <option key={pos} value={pos}>
                                                                     {pos}{pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th'}

@@ -1,7 +1,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { AppState, Tournament, Player } from '../models/types';
-import { loadAppState, saveAppState, restoreFromAutoBackup } from '../services/storageService';
+import {
+    loadAppState,
+    saveAppState,
+    restoreFromAutoBackup,
+    getAvailableBackups
+} from '../services/storageService';
 
 // Install uuid for ID generation
 // npm install uuid @types/uuid
@@ -20,6 +25,8 @@ interface AppContextType {
     updateTournament: (tournament: Tournament) => void;
     deleteTournament: (id: string) => void;
     refreshAppState: () => void;
+    autoRestorePerformed: boolean;
+    clearAutoRestoreFlag: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -32,29 +39,58 @@ interface AppProviderProps {
 export const AppProvider = ({ children }: AppProviderProps) => {
     const [state, setState] = useState<AppState>(initialState);
     const [activeTournament, setActiveTournament] = useState<Tournament | undefined>(undefined);
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+    const [autoRestorePerformed, setAutoRestorePerformed] = useState(false);
+
+    // Clear the auto-restore flag
+    const clearAutoRestoreFlag = () => {
+        setAutoRestorePerformed(false);
+    };
 
     // Load state from local storage on initial load
     useEffect(() => {
-        const savedState = loadAppState();
-        if (savedState) {
-            setState(savedState);
-        } else {
-            // Try to restore from auto-backup if no data found
-            const restoredFromBackup = restoreFromAutoBackup();
-            if (restoredFromBackup) {
-                const backupState = loadAppState();
-                if (backupState) {
-                    setState(backupState);
-                    console.log('Restored data from auto-backup');
+        const loadAppData = async () => {
+            // First, check for data in localStorage
+            const savedState = loadAppState();
+
+            if (savedState && savedState.tournaments && savedState.tournaments.length > 0) {
+                // If we have tournaments in localStorage, use that state
+                setState(savedState);
+                console.log('Loaded data from localStorage with', savedState.tournaments.length, 'tournaments');
+            } else {
+                // No tournaments in localStorage, try to restore from the latest backup
+                const backups = getAvailableBackups();
+
+                if (backups.length > 0) {
+                    console.log('No tournaments found in current state, attempting to restore latest backup');
+                    // Get latest backup
+                    const restored = restoreFromAutoBackup();
+
+                    if (restored) {
+                        // If restoration was successful, load the updated state
+                        const restoredState = loadAppState();
+                        if (restoredState) {
+                            setState(restoredState);
+                            setAutoRestorePerformed(true);
+                            console.log('Successfully restored', restoredState.tournaments.length, 'tournaments from auto-backup');
+                        }
+                    }
                 }
             }
-        }
+
+            setInitialLoadComplete(true);
+        };
+
+        loadAppData();
     }, []);
 
     // Save state to local storage whenever it changes
+    // Only start saving after initial load is complete to prevent overwriting with empty state
     useEffect(() => {
-        saveAppState(state);
-    }, [state]);
+        if (initialLoadComplete) {
+            saveAppState(state);
+        }
+    }, [state, initialLoadComplete]);
 
     // Force refresh the app state from localStorage
     const refreshAppState = () => {
@@ -124,13 +160,15 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         updateTournament,
         deleteTournament,
         refreshAppState,
+        autoRestorePerformed,
+        clearAutoRestoreFlag,
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 // Custom hook to use the AppContext
-export const useAppContext = () => {
+export const useAppContext = function useAppContext() {
     const context = useContext(AppContext);
     if (context === undefined) {
         throw new Error('useAppContext must be used within an AppProvider');

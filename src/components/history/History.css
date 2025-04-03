@@ -1,0 +1,39 @@
+.history-container {
+    margin-bottom: 2rem;
+}
+
+.search-container {
+    max-width: 300px;
+    width: 100%;
+}
+
+.tournament-info-section {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Style for the table */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 100%;
+        margin-top: 1rem;
+    }
+}

@@ -19,12 +19,23 @@
     overflow-y: auto;
 }
 
+.tournament-info {
+    display: flex;
+    flex-direction: column;
+}
+
 .tournament-name {
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 160px;
+}
+
+.tournament-date {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 2px;
 }
 
 /* Content area styling */
