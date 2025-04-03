@@ -46,8 +46,11 @@ function LiveTournaments() {
     };
 
     const handleCreateNewTournament = () => {
+        // Count existing live tournaments to create an appropriate name
+        const liveTournamentCount = state.tournaments.filter(t => t.type === 'live').length;
+
         const newTournament = createTournament(
-            `Tournament ${liveTournaments.length + 1}`,
+            `Tournament ${liveTournamentCount + 1}`,
             [], // Empty players array initially
             'live'
         );

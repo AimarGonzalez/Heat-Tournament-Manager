@@ -1,0 +1,50 @@
+/* Simulation styles */
+.round-tables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Custom styles for table sizing */
+.round-tables .card {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* Style for table headers */
+.round-results-table thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+}
+
+/* Color centered display */
+.round-results-table td.text-center {
+    vertical-align: middle;
+}
+
+/* Tournament navigation tabs */
+.tournament-nav {
+    border-bottom: none;
+}
+
+.tournament-nav .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    color: #495057;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tournament-nav .nav-link.active {
+    color: #007bff;
+    background-color: transparent;
+    border-color: #dee2e6 #dee2e6 #fff;
+    font-weight: 500;
+}
+
+.tournament-nav .nav-link:hover:not(.active) {
+    background-color: rgba(0, 123, 255, 0.05);
+    border-color: transparent;
+}

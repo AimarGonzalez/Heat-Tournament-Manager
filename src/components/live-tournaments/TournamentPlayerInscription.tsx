@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
@@ -26,14 +26,31 @@ interface TournamentPlayerInscriptionProps {
 function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlayerInscriptionProps) {
     const { updateTournament } = useAppContext();
     const [tournamentName, setTournamentName] = useState(tournament.name);
-    const [playerNames, setPlayerNames] = useState<string[]>(Array(12).fill(''));
+    const [playerNames, setPlayerNames] = useState<string[]>(() => {
+        // Initialize with existing player names or empty array of 12 slots
+        if (tournament.players.length > 0) {
+            return tournament.players.map(p => p.name);
+        }
+        return Array(12).fill('');
+    });
     const [validated, setValidated] = useState(false);
+    const [isEditing, setIsEditing] = useState(tournament.players.length === 0);
 
-    const handlePlayerNameChange = (index: number, name: string) => {
-        const newPlayerNames = [...playerNames];
-        newPlayerNames[index] = name;
-        setPlayerNames(newPlayerNames);
-    };
+    // Auto save changes when tournament name or player names change
+    useEffect(() => {
+        // Only save changes if we're editing an existing tournament with players
+        if (!isEditing && tournament.players.length > 0) {
+            const updatedTournament = {
+                ...tournament,
+                name: tournamentName,
+                players: tournament.players.map((player, index) => ({
+                    ...player,
+                    name: playerNames[index] || player.name // Keep existing name if empty
+                }))
+            };
+            updateTournament(updatedTournament);
+        }
+    }, [tournamentName, playerNames, isEditing, tournament.players.length]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -45,26 +62,39 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
             return;
         }
 
-        // Create player objects from names
-        const players: Player[] = playerNames.map(name => ({
-            id: uuidv4(),
-            name,
-            mastery: 0 // Initial mastery
-        }));
+        // If we're creating a new tournament (no players yet)
+        if (tournament.players.length === 0) {
+            // Create players from names
+            const players: Player[] = playerNames
+                .filter(name => name.trim() !== '')
+                .map(name => ({
+                    id: uuidv4(),
+                    name
+                }));
 
-        // Update tournament
-        const updatedTournament = {
-            ...tournament,
-            name: tournamentName,
-            players
-        };
+            // Validate that we have exactly 12 players
+            if (players.length !== 12) {
+                setValidated(true);
+                return;
+            }
 
-        updateTournament(updatedTournament);
+            // Update tournament with name and players
+            const updatedTournament = {
+                ...tournament,
+                name: tournamentName,
+                players
+            };
+
+            updateTournament(updatedTournament);
+        }
+
         onComplete();
     };
 
-    const areAllPlayersNamed = () => {
-        return playerNames.every(name => name.trim().length > 0);
+    const handleNameChange = (index: number, value: string) => {
+        const newPlayerNames = [...playerNames];
+        newPlayerNames[index] = value;
+        setPlayerNames(newPlayerNames);
     };
 
     // Autofill empty player names with dwarven names
@@ -113,7 +143,7 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
     return (
         <Card className="player-inscription-card">
             <Card.Header className="d-flex justify-content-between align-items-center">
-                <span>Player Inscription</span>
+                <span>{isEditing ? 'Player Inscription' : 'Edit Tournament Details'}</span>
                 <Button
                     variant="outline-secondary"
                     size="sm"
@@ -144,19 +174,19 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
                     <h5 className="player-names-header mb-3">Player Names</h5>
 
                     <Row className="player-grid">
-                        {playerNames.map((name, index) => (
-                            <Col md={4} lg={3} key={index} className="mb-3">
+                        {Array.from({ length: 12 }).map((_, index) => (
+                            <Col key={index} md={6} lg={4} className="mb-3">
                                 <Form.Group>
                                     <Form.Label>Player {index + 1}</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={name}
-                                        placeholder={`Enter player ${index + 1} name`}
-                                        onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                                        value={playerNames[index] || ''}
+                                        onChange={(e) => handleNameChange(index, e.target.value)}
+                                        placeholder={`Enter name for player ${index + 1}`}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please provide a player name.
+                                        Please provide a name for player {index + 1}.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
@@ -164,12 +194,8 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
                     </Row>
 
                     <div className="d-grid gap-2 mt-4">
-                        <Button
-                            variant="primary"
-                            type="submit"
-                            disabled={!areAllPlayersNamed()}
-                        >
-                            Continue to Round 1
+                        <Button type="submit" variant="primary" size="lg">
+                            {isEditing ? 'Start Tournament' : 'Save Changes'}
                         </Button>
                     </div>
                 </Form>
