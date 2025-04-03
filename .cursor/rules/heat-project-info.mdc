@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Project description
+- I want to create a web application. That runs only with local files, and nothing should be in the server.
+- The application is a tournament manager for a board game named HEAT Pedal to the Metal
+- Since this is a racing game, sometimes I will refer to players as pilots.
+
+# Tournament rules
+I'm an organization hosting tournament events of a racing game named HEAT (we play the board game Heat player to the metal).
+
+Every tournament has the same format. There are 12 players, divided into 2 tables playing HEAT.
+
+We will play 2 rounds of games. In each round, there are 6 players at each table. Each player will play a total of 2 games. In each game, we randomly assign which players go to each table. At the end of each game, each player receives points depending on their final position:
+- 1st position: 9 points
+- 2nd position: 6 points
+- 2rd position: 4 points
+- 4th position: 3 points
+- 5th position: 2 points
+- 6th position: 1 points
+
+To help solve ties, there is the Difficulty bonus. To calculate this bonus you need to first know that every player has a Mastery score, which is their total score divided by 100.
+After the 2 rounds you have to calculate and keep the mastery score for each player.
+Now, the difficulty bonus awarded to a player is, for each round gain a bonus equal to the added Mastery of the rivals in the table. You can name them Difficulty bonus for round 1 and difficulty bonus for round 2.
+
+The tournament ranking table will sort players according to their final score plus the difficulty bonus of both rounds.
+
+
+# Application structure
+- The application has 3 main sections: Live Tournament | Simulation | History
+- The live tournament section has a list of existing tournaments. And allows to create/delete and enter an existing tournament.
+- The Simulation section allows running tournament simulations, generating random player names, random results, and showing a results table.
+- The History section is a list of all played and simulated tournaments.

@@ -1,0 +1,213 @@
+.tournament-results-table-container {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+.tournament-results-table {
+    position: relative;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tournament-results-table thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    padding: 12px 15px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid #e9ecef;
+    white-space: nowrap;
+}
+
+.tournament-results-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.player-row {
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.player-row:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.player-row.first-place {
+    background-color: rgba(255, 223, 0, 0.05);
+}
+
+.player-row.first-place:hover {
+    background-color: rgba(255, 223, 0, 0.1);
+}
+
+.player-name-cell {
+    font-weight: 500;
+}
+
+.player-name {
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* Position tag styling */
+.position-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    font-weight: 600;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    background-color: #f1f3f5;
+    color: #495057;
+    transition: all 0.2s ease;
+}
+
+.position-tag:hover {
+    transform: scale(1.05);
+}
+
+/* Position column in the table */
+.tournament-results-table .position-column {
+    text-align: center;
+    font-weight: 600;
+    padding: 12px 8px;
+    white-space: nowrap;
+}
+
+.rank-number {
+    display: inline-block;
+    min-width: 24px;
+    text-align: right;
+    margin-right: 2px;
+}
+
+.position-tag.position-first {
+    background-color: rgba(144, 238, 144, 0.4);
+    /* Pastel green */
+    color: #2c6e2c;
+}
+
+.position-tag.position-second {
+    background-color: rgba(173, 216, 230, 0.4);
+    /* Pastel blue */
+    color: #1a5276;
+}
+
+.position-tag.position-third {
+    background-color: rgba(255, 255, 153, 0.4);
+    /* Pastel yellow */
+    color: #7d6608;
+}
+
+.position-tag.position-fourth {
+    background-color: rgba(255, 204, 153, 0.4);
+    /* Pastel orange */
+    color: #a04000;
+}
+
+.position-tag.position-other {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.score-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.score-cell .position-tag {
+    margin-right: 5px;
+    min-width: 40px;
+    display: inline-flex;
+}
+
+.score-cell .points-display {
+    display: inline-flex;
+    min-width: 30px;
+    justify-content: center;
+}
+
+/* Points display */
+.points-display {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    background-color: rgba(52, 58, 64, 0.05);
+    color: #6c757d;
+    margin-left: 4px;
+}
+
+.points-cell,
+.bonus-cell {
+    text-align: center;
+    font-weight: 600;
+}
+
+.bonus-cell {
+    background-color: rgba(13, 110, 253, 0.05);
+    color: #0d6efd;
+    transition: background-color 0.2s ease;
+}
+
+/* Separator row */
+.tournament-results-table .separator-row {
+    height: 5px;
+    background-color: transparent !important;
+}
+
+.tournament-results-table .separator-row:hover {
+    transform: none !important;
+    background-color: transparent !important;
+}
+
+.tournament-results-table .separator-cell {
+    position: relative;
+    padding: 0 !important;
+    height: 1px;
+    border-top: 2px dashed #6c757d !important;
+    border-bottom: none !important;
+}
+
+/* Top 6 label */
+.top-six-label {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #6c757d;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    pointer-events: none;
+}

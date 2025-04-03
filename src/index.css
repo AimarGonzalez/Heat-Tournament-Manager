@@ -1,0 +1,83 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #f5f5f5;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #0d6efd;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #0a58ca;
+}
+
+body {
+  margin: 0;
+  display: block;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #0d6efd;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Fix the container width on larger screens */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1600px !important;
+  }
+}
+
+/* Improve dropdown and form element styling */
+.form-select {
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+.form-select option {
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+/* When dropdown is open, make sure options are visible */
+.form-select:focus {
+  z-index: 1021;
+  position: relative;
+}
