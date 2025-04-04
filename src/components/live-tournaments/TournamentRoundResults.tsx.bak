@@ -12,7 +12,6 @@ import './TournamentRoundResults.css';
 // Add imports for car picker
 import { USE_CAR_PICKER_STYLE } from '../../config/constants';
 import ColorCarPicker from '../shared/ColorCarPicker';
-import { useColorPickerContext } from '../../context/ColorPickerContext';
 
 interface TournamentRoundResultsProps {
     tournament: Tournament;
@@ -463,7 +462,62 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
         return `Submit Round ${roundNumber} Results`;
     };
 
+    const getButtonText = () => {
+        if (isEditMode) {
+            return 'Apply Scores';
+        }
+        return `Submit Round ${roundNumber} Results`;
+    };
+
+    // Apply scores and update tournament
+    const onApplyScores = () => {
+        try {
+            const tableInputs = getTableInputs();
+            const updatedResults = getRoundResults(tableInputs, tournament);
+            updateRoundResultsInTournament(updatedResults);
+
+            toast.success('Scores applied successfully');
+            setIsEditMode(false);
+        } catch (error) {
+            console.error('Error applying scores:', error);
+            toast.error('Error applying scores');
+        }
+    };
+
     // Auto-save to draft as changes are made - DISABLED to fix infinite update loop
+    // useEffect(() => {
+    //     // Skip auto-save if not in edit mode or if already saving
+    //     if (!isEditMode || isAutoSaving.current) {
+    //         return;
+    //     }
+    //     
+    //     try {
+    //         isAutoSaving.current = true;
+    //         const tableInputs = getTableInputs();
+    //         const updatedResults = getRoundResults(tableInputs, tournament);
+    //         
+    //         // Clone tournament to avoid direct mutation
+    //         const finalTournament = JSON.parse(JSON.stringify(tournament));
+    //         updatedResults.forEach((result) => {
+    //             const roundIndex = finalTournament.rounds.findIndex(
+    //                 (r) => r.number === result.roundNumber
+    //             );
+    //             
+    //             if (roundIndex !== -1) {
+    //                 finalTournament.rounds[roundIndex].results = result.results;
+    //             }
+    //         });
+    //         
+    //         // Updates cause re-rendering which triggers this effect again
+    //         updateTournament(finalTournament);
+    //     } catch (error) {
+    //         console.error('Error in auto-save:', error);
+    //     } finally {
+    //         isAutoSaving.current = false;
+    //     }
+    // }, [isEditMode, JSON.stringify(tables)]);
+
+    // Recover data from previous auto-backup
 
     return (
         <Card>
@@ -530,12 +584,43 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
                                                         />
                                                     </td>
                                                     <td>
-                                                        {/* Color picker using context */}
+                                                        {(window as any).USE_CAR_PICKER_STYLE !== undefined
+                                                            ? (window as any).USE_CAR_PICKER_STYLE
+                                                            : USE_CAR_PICKER_STYLE ? (
+                                                                <ColorCarPicker
+                                                                    value={table.playerColors[slotIndex]}
+                                                                    onChange={(color) => handleColorChange(
+                                                                        tableIndex,
+                                                                        slotIndex,
+                                                                        color
+                                                                    )}
+                                                                    availableColors={availableColors}
+                                                                    tableColors={table.playerColors}
+                                                                    currentIndex={slotIndex}
+                                                                />
+                                                            ) : (
+                                                                <ColorPicker
+                                                                    value={table.playerColors[slotIndex]}
+                                                                    onChange={(color) => handleColorChange(
+                                                                        tableIndex,
+                                                                        slotIndex,
+                                                                        color
+                                                                    )}
+                                                                    availableColors={availableColors}
+                                                                    tableColors={table.playerColors}
+                                                                    currentIndex={slotIndex}
+                                                                />
+                                                            )}
+                                                    </td>
+                                                    <td>
+                                                        {/* Fixed color picker */}
                                                         {(() => {
-                                                            // Use the context for the car picker style preference
-                                                            const { useCarPicker } = useColorPickerContext();
+                                                            const saved = localStorage.getItem('useCarPickerStyle');
+                                                            const useCarStyle = saved !== null
+                                                                ? JSON.parse(saved)
+                                                                : USE_CAR_PICKER_STYLE;
 
-                                                            return useCarPicker ? (
+                                                            return useCarStyle ? (
                                                                 <ColorCarPicker
                                                                     value={table.playerColors[slotIndex]}
                                                                     onChange={(color) => handleColorChange(

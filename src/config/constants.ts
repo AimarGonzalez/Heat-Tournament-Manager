@@ -22,6 +22,9 @@ export const LAST_NAMES = [
     'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson'
 ];
 
+// UI Configuration
+export const USE_CAR_PICKER_STYLE = false; // When true, uses car icons instead of color squares
+
 /**
  * Generate a random player name
  */

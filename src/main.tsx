@@ -1,14 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 import './index.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import App from './App.tsx'
+import App from './App'
 import { AppProvider } from './context/AppContext'
+import { ColorPickerProvider } from './context/ColorPickerContext'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
     <AppProvider>
-      <App />
+      <ColorPickerProvider>
+        <App />
+      </ColorPickerProvider>
     </AppProvider>
-  </StrictMode>,
+  </React.StrictMode>,
 )

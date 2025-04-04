@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
@@ -35,11 +35,31 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
     });
     const [validated, setValidated] = useState(false);
     const [isEditing, setIsEditing] = useState(tournament.players.length === 0);
+    // Add a ref to track auto-save operations
+    const isAutoSaving = useRef(false);
 
-    // Auto save changes when tournament name or player names change
-    useEffect(() => {
-        // Always save changes for tournaments with existing players
-        if (tournament.players.length > 0) {
+    // OLD AUTO-SAVE (DISABLED to fix infinite update loop)
+    // useEffect(() => {
+    //     // Always save changes for tournaments with existing players
+    //     if (tournament.players.length > 0) {
+    //         const updatedTournament = {
+    //             ...tournament,
+    //             name: tournamentName,
+    //             players: tournament.players.map((player, index) => ({
+    //                 ...player,
+    //                 name: playerNames[index] || player.name // Keep existing name if empty
+    //             }))
+    //         };
+    //         updateTournament(updatedTournament);
+    //     }
+    // }, [tournamentName, playerNames, tournament, updateTournament]);
+
+    // Replace the above useEffect with a debounced version
+    // Memoize the save function
+    const saveFunction = useRef(() => {
+        if (tournament.players.length > 0 && !isAutoSaving.current) {
+            isAutoSaving.current = true;
+
             const updatedTournament = {
                 ...tournament,
                 name: tournamentName,
@@ -48,9 +68,51 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
                     name: playerNames[index] || player.name // Keep existing name if empty
                 }))
             };
+
             updateTournament(updatedTournament);
+
+            // Reset the flag after saving
+            setTimeout(() => {
+                isAutoSaving.current = false;
+            }, 0);
         }
+    });
+
+    // Update the save function when dependencies change
+    useEffect(() => {
+        saveFunction.current = () => {
+            if (tournament.players.length > 0 && !isAutoSaving.current) {
+                isAutoSaving.current = true;
+
+                const updatedTournament = {
+                    ...tournament,
+                    name: tournamentName,
+                    players: tournament.players.map((player, index) => ({
+                        ...player,
+                        name: playerNames[index] || player.name // Keep existing name if empty
+                    }))
+                };
+
+                updateTournament(updatedTournament);
+
+                // Reset the flag after saving
+                setTimeout(() => {
+                    isAutoSaving.current = false;
+                }, 0);
+            }
+        };
     }, [tournamentName, playerNames, tournament, updateTournament]);
+
+    // Debounced auto-save
+    useEffect(() => {
+        if (tournament.players.length === 0) return;
+
+        const timeoutId = setTimeout(() => {
+            saveFunction.current();
+        }, 1000); // 1 second debounce
+
+        return () => clearTimeout(timeoutId);
+    }, [tournamentName, playerNames]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

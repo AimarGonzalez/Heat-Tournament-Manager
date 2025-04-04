@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import { Tabs, Tab, Container, Alert } from 'react-bootstrap'
+import { Tabs, Tab, Container, Alert, Button } from 'react-bootstrap'
 import './App.css'
 import { useAppContext } from './context/AppContext'
+
+// Import the config
+import { USE_CAR_PICKER_STYLE } from './config/constants'
+
+// Import the ColorPickerContext
+import { useColorPickerContext } from './context/ColorPickerContext'
 
 // Import section components
 import LiveTournaments from './components/live-tournaments/LiveTournaments'
@@ -17,6 +23,9 @@ function App() {
   const [showDebug, setShowDebug] = useState(false)
   const { autoRestorePerformed, clearAutoRestoreFlag, state } = useAppContext()
   const [showRestoreNotification, setShowRestoreNotification] = useState(false)
+
+  // Get car picker state and toggle function from context
+  const { useCarPicker, toggleCarPickerStyle } = useColorPickerContext();
 
   // Show notification when data is auto-restored
   useEffect(() => {
@@ -66,6 +75,14 @@ function App() {
             >
               {showDebug ? 'Hide Debug' : 'Debug'}
             </button>
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={toggleCarPickerStyle}
+              style={{ marginLeft: '12px', fontSize: '12px' }}
+            >
+              {useCarPicker ? 'Use Color Squares' : 'Use Car Icons'}
+            </Button>
           </h1>
           <DataManager />
         </div>
