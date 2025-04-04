@@ -185,7 +185,7 @@ function LiveTournaments() {
                                             <ListGroup.Item
                                                 key={tournament.id}
                                                 as="div"
-                                                className="d-flex justify-content-between align-items-start"
+                                                className={`d-flex justify-content-between align-items-start ${activeTournament?.id === tournament.id ? 'selected-tournament' : ''}`}
                                             >
                                                 <div
                                                     className="tournament-info flex-grow-1"
@@ -200,14 +200,16 @@ function LiveTournaments() {
                                                     </div>
                                                     <div className="tournament-date">{formatDate(tournament.date)}</div>
                                                 </div>
-                                                <Button
-                                                    variant="outline-secondary"
-                                                    size="sm"
-                                                    title="Archive Tournament"
-                                                    onClick={(e) => handleArchiveTournament(tournament.id, e)}
-                                                >
-                                                    <i className="bi bi-archive"></i>
-                                                </Button>
+                                                {activeTournament?.id === tournament.id && (
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        size="sm"
+                                                        title="Archive Tournament"
+                                                        onClick={(e) => handleArchiveTournament(tournament.id, e)}
+                                                    >
+                                                        <i className="bi bi-archive"></i>
+                                                    </Button>
+                                                )}
                                             </ListGroup.Item>
                                         );
                                     })}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, ListGroup, Row, Col, Nav, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Button, Card, ListGroup, Row, Col, Nav, DropdownButton, Dropdown, Modal } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player } from '../../models/types';
 import './History.css';
@@ -9,12 +9,14 @@ import TournamentRoundResults from '../live-tournaments/TournamentRoundResults';
 import TournamentResultsTable from '../live-tournaments/TournamentResultsTable';
 
 function History() {
-    const { state, restoreTournament } = useAppContext();
+    const { state, restoreTournament, deleteTournament } = useAppContext();
     const [tournaments, setTournaments] = useState<Tournament[]>([]);
     const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
     const [activeTournamentView, setActiveTournamentView] = useState<'inscription' | 'round1' | 'round2' | 'results'>('inscription');
     const [sortOption, setSortOption] = useState<'date' | 'name'>('date');
     const [filterOption, setFilterOption] = useState<'all' | 'live' | 'simulation' | 'archived'>('all');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [tournamentToDelete, setTournamentToDelete] = useState<Tournament | null>(null);
 
     useEffect(() => {
         let filtered = [...state.tournaments];
@@ -141,6 +143,29 @@ function History() {
         restoreTournament(tournament.id);
     };
 
+    const handleDeleteClick = (tournament: Tournament, e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent tournament selection
+        setTournamentToDelete(tournament);
+        setShowDeleteModal(true);
+    };
+
+    const handleConfirmDelete = () => {
+        if (tournamentToDelete) {
+            deleteTournament(tournamentToDelete.id);
+
+            // If the deleted tournament was selected, clear selection
+            if (selectedTournament?.id === tournamentToDelete.id) {
+                setSelectedTournament(null);
+            }
+        }
+        setShowDeleteModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
+        setTournamentToDelete(null);
+    };
+
     // Determine available navigation options based on tournament state
     const getAvailableViews = () => {
         if (!selectedTournament) return [];
@@ -239,16 +264,29 @@ function History() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                {tournament.archived && (
-                                                    <Button
-                                                        variant="outline-success"
-                                                        size="sm"
-                                                        title="Restore Tournament"
-                                                        onClick={(e) => handleRestoreTournament(tournament, e)}
-                                                    >
-                                                        <i className="bi bi-arrow-counterclockwise"></i>
-                                                    </Button>
-                                                )}
+                                                <div className="button-group">
+                                                    {tournament.archived && (
+                                                        <Button
+                                                            variant="outline-success"
+                                                            size="sm"
+                                                            title="Restore Tournament"
+                                                            onClick={(e) => handleRestoreTournament(tournament, e)}
+                                                            className="me-1"
+                                                        >
+                                                            <i className="bi bi-arrow-counterclockwise"></i>
+                                                        </Button>
+                                                    )}
+                                                    {selectedTournament?.id === tournament.id && (
+                                                        <Button
+                                                            variant="outline-danger"
+                                                            size="sm"
+                                                            title="Permanently Delete Tournament"
+                                                            onClick={(e) => handleDeleteClick(tournament, e)}
+                                                        >
+                                                            <i className="bi bi-trash"></i>
+                                                        </Button>
+                                                    )}
+                                                </div>
                                             </ListGroup.Item>
                                         );
                                     })}
@@ -355,6 +393,25 @@ function History() {
                     )}
                 </Col>
             </Row>
+
+            {/* Delete Confirmation Modal */}
+            <Modal show={showDeleteModal} onHide={handleCancelDelete} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Permanent Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you sure you want to permanently delete "{tournamentToDelete?.name}"?</p>
+                    <p className="text-danger fw-bold">This action cannot be undone and will remove this tournament from all data.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancelDelete}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>
+                        Delete Permanently
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

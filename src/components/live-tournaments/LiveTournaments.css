@@ -84,6 +84,13 @@
     font-weight: 500;
 }
 
+/* Styling for selected tournament item */
+.tournament-list .list-group-item.selected-tournament {
+    background-color: rgba(13, 110, 253, 0.05);
+    border-left: 3px solid #0d6efd;
+    transition: background-color 0.2s ease;
+}
+
 .tournament-list .list-group-item.active .tournament-date {
     color: #6c9bd1;
     /* Slightly darker color for the date when selected */

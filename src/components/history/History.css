@@ -271,6 +271,11 @@
     .history-container {
         padding: 0;
     }
+
+    .button-group button {
+        padding: 2px 4px;
+        font-size: 0.75rem;
+    }
 }
 
 .history-filters {
@@ -285,4 +290,13 @@
 .history-table .table th,
 .history-table .table td {
     padding: 4px;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+}
+
+.button-group button {
+    margin-left: 5px;
 }
