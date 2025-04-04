@@ -5,9 +5,6 @@ import { Tabs, Tab, Container, Alert, Button } from 'react-bootstrap'
 import './App.css'
 import { useAppContext } from './context/AppContext'
 
-// Import the config
-import { USE_CAR_PICKER_STYLE } from './config/constants'
-
 // Import the ColorPickerContext
 import { useColorPickerContext } from './context/ColorPickerContext'
 

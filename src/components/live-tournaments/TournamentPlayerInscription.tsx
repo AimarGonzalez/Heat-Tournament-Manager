@@ -34,7 +34,7 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
         return Array(12).fill('');
     });
     const [validated, setValidated] = useState(false);
-    const [isEditing, setIsEditing] = useState(tournament.players.length === 0);
+    const isEditing = tournament.players.length === 0;
     // Add a ref to track auto-save operations
     const isAutoSaving = useRef(false);
 

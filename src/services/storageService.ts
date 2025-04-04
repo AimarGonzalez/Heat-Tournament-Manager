@@ -1,7 +1,6 @@
 import { Tournament, AppState } from '../models/types';
 
 const STORAGE_KEY = 'heat-tournament-data';
-const LAST_BACKUP_KEY = 'heat-tournament-last-backup';
 // We'll still track the backup time for informational purposes
 const LAST_BACKUP_TIME_KEY = 'heat-tournament-last-backup-time';
 
@@ -183,14 +182,6 @@ export const importData = (file: File): Promise<boolean> => {
 
         reader.readAsText(file);
     });
-};
-
-/**
- * Get the timestamp of the last backup
- */
-const getLastBackupTime = (): number | null => {
-    const timestamp = localStorage.getItem(LAST_BACKUP_TIME_KEY);
-    return timestamp ? parseInt(timestamp, 10) : null;
 };
 
 /**

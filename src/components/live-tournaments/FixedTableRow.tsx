@@ -1,10 +1,17 @@
 import React from 'react';
-import { TableAssignment, Tournament } from '../../models/types';
+import { Tournament } from '../../models/types';
 import PlayerPicker from './PlayerPicker';
 import PositionPicker from './PositionPicker';
 import ColorPicker from './ColorPicker';
 import ColorCarPicker from '../shared/ColorCarPicker';
 import { useColorPickerContext } from '../../context/ColorPickerContext';
+
+interface TableAssignment {
+    tableId: string;
+    playerSlots: Array<string | null>;
+    positions: Array<number | null>;
+    playerColors: Array<string | null>;
+}
 
 interface TableRowProps {
     table: TableAssignment;

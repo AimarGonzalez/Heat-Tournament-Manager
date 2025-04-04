@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Dropdown } from 'react-bootstrap';
 import { Player } from '../../models/types';
 import './DropdownPicker.css';
 
@@ -14,7 +13,6 @@ interface PlayerPickerProps {
 const PlayerPicker: React.FC<PlayerPickerProps> = ({
     value,
     onChange,
-    players,
     availablePlayers,
     selectedPlayer
 }) => {

@@ -48,11 +48,6 @@ const ColorCarPicker: React.FC<ColorCarPickerProps> = ({
         };
     }, []);
 
-    const getSelectedColor = () => {
-        if (!value) return null;
-        return availableColors.find(color => color.value === value) || null;
-    };
-
     // Filter out colors that are already used in this table (except for the current position's color)
     const getAvailableColors = () => {
         // Get all colors currently used in the table except for the current position

@@ -1,16 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { Card, Form, Button, Row, Col, Table, Modal, Alert } from 'react-bootstrap';
-import { v4 as uuidv4 } from 'uuid';
+import { useState, useRef, useEffect } from 'react';
+import { Card, Button, Row, Col, Table } from 'react-bootstrap';
+import { Tournament, TournamentRound, GameResult } from '../../models/types';
 import { useAppContext } from '../../context/AppContext';
-import { Tournament, TournamentRound, GameResult, Player } from '../../models/types';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
 import ColorPicker from './ColorPicker';
 import PlayerPicker from './PlayerPicker';
 import PositionPicker from './PositionPicker';
 import './TournamentRoundResults.css';
-
-// Add imports for car picker
-import { USE_CAR_PICKER_STYLE } from '../../config/constants';
 import ColorCarPicker from '../shared/ColorCarPicker';
 import { useColorPickerContext } from '../../context/ColorPickerContext';
 
@@ -35,8 +31,6 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
     const [tables, setTables] = useState<TableAssignment[]>(() => {
         return initializeTables(tournament, roundNumber);
     });
-    const isAutoSaving = useRef(false);
-    const [isEditMode, setIsEditMode] = useState(false);
 
     const [errors, setErrors] = useState({
         playerAssignment: false,
