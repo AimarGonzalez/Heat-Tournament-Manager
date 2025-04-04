@@ -23,7 +23,7 @@ export const LAST_NAMES = [
 ];
 
 // UI Configuration
-export const USE_CAR_PICKER_STYLE = false; // When true, uses car icons instead of color squares
+export const USE_CAR_PICKER_STYLE = true; // When true, uses car icons instead of color squares
 
 /**
  * Generate a random player name
