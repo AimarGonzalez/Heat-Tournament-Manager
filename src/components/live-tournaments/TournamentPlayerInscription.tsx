@@ -195,19 +195,23 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
             <Card.Header className="d-flex justify-content-between align-items-center">
                 <span>{isEditing ? 'Player Inscription' : 'Edit Tournament Details'}</span>
                 <Button
-                    variant="outline-secondary"
+                    variant="outline-warning"
                     size="sm"
                     onClick={handleAutofill}
+                    style={{
+                        color: '#fd7e14',
+                        borderColor: '#fd7e14'
+                    }}
                 >
                     <i className="bi bi-magic me-1"></i> Autofill with Dwarven Names
                 </Button>
             </Card.Header>
             <Card.Body>
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    <Row className="mb-4">
+                    <Form.Label className="section-header mb-2">Tournament Name</Form.Label>
+                    <Row>
                         <Col md={6} lg={4}>
-                            <Form.Group>
-                                <Form.Label>Tournament Name</Form.Label>
+                            <Form.Group className="mb-4">
                                 <Form.Control
                                     type="text"
                                     value={tournamentName}
@@ -221,27 +225,28 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
                         </Col>
                     </Row>
 
-                    <h5 className="player-names-header mb-3">Player Names</h5>
+                    <Form.Label className="section-header mb-2">Player Names</Form.Label>
 
-                    <Row className="player-grid">
-                        {Array.from({ length: 12 }).map((_, index) => (
-                            <Col key={index} md={6} lg={4} className="mb-3">
-                                <Form.Group>
-                                    <Form.Label>Player {index + 1}</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={playerNames[index] || ''}
-                                        onChange={(e) => handleNameChange(index, e.target.value)}
-                                        placeholder={`Enter name for player ${index + 1}`}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide a name for player {index + 1}.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Col>
-                        ))}
-                    </Row>
+                    <div className="player-grid">
+                        <Row className="g-3">
+                            {Array.from({ length: 12 }).map((_, index) => (
+                                <Col key={index} md={6} lg={4}>
+                                    <Form.Group>
+                                        <Form.Control
+                                            type="text"
+                                            value={playerNames[index] || ''}
+                                            onChange={(e) => handleNameChange(index, e.target.value)}
+                                            placeholder={`Enter name for player ${index + 1}`}
+                                            required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            Please provide a name for player {index + 1}.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                            ))}
+                        </Row>
+                    </div>
 
                     <div className="d-grid gap-2 mt-4">
                         <Button type="submit" variant="primary" size="lg">

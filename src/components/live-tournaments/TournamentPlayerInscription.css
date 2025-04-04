@@ -2,15 +2,17 @@
     margin-bottom: 20px;
 }
 
-.player-names-header {
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 10px;
-    margin-top: 20px;
+.section-header {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #212529;
+    display: block;
+    padding-bottom: 8px;
+    margin-bottom: 1rem !important;
 }
 
 .player-grid {
-    margin-left: -10px;
-    margin-right: -10px;
+    margin: 0;
 }
 
 /* Responsive adjustments */
@@ -26,22 +28,29 @@
     .player-inscription-card .card-header {
         padding: 0.5rem;
     }
-    
+
     .player-inscription-card .card-body {
         padding: 0.75rem;
     }
-    
+
     .player-grid .col-md-6 {
         padding-right: 6px;
         padding-left: 6px;
     }
-    
+
     .form-group {
         margin-bottom: 0.5rem;
     }
-    
+
     .form-control {
         padding: 0.3rem 0.5rem;
         font-size: 0.9rem;
     }
+}
+
+.player-grid .form-control::placeholder {
+    font-style: italic;
+    color: #adb5bd !important;
+    /* Bootstrap's gray-500 color */
+    opacity: 1;
 }

@@ -75,12 +75,6 @@ tr {
     padding-right: 0;
 }
 
-/* Remove margin from first column */
-.col:first-child,
-[class*="col-"]:first-child {
-    padding-left: 0;
-}
-
 /* Adjust row margins */
 .row {
     margin-right: 0;

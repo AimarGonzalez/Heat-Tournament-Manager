@@ -464,10 +464,14 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
             <Card.Header className="d-flex justify-content-between align-items-center">
                 <span>{isEdit ? `Edit Round ${roundNumber} Results` : `Round ${roundNumber} Results`}</span>
                 <Button
-                    variant="outline-primary"
+                    variant="outline-warning"
                     size="sm"
                     onClick={handleRandomize}
                     title="Randomly assign players and positions"
+                    style={{
+                        color: '#fd7e14',
+                        borderColor: '#fd7e14'
+                    }}
                 >
                     <i className="bi bi-shuffle me-1"></i> Randomize Assignments
                 </Button>
