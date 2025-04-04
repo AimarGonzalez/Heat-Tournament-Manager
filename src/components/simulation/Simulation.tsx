@@ -5,6 +5,8 @@ import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player, TournamentRound, GameResult } from '../../models/types';
 import TournamentResultsTable from '../live-tournaments/TournamentResultsTable';
 import ColorSquare from '../live-tournaments/ColorSquare';
+import ColorCarPicker from '../shared/ColorCarPicker';
+import { useColorPickerContext } from '../../context/ColorPickerContext';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
 import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
 import './Simulation.css';
@@ -262,6 +264,7 @@ function Simulation() {
 
         const round = simulatedTournament.rounds[roundNumber - 1];
         const players = simulatedTournament.players;
+        const { useCarPicker } = useColorPickerContext();
 
         return (
             <div className="round-tables">
@@ -292,7 +295,19 @@ function Simulation() {
                                                     <td className="text-center">{formatPosition(result.position)}</td>
                                                     <td>{player?.name || 'Unknown'}</td>
                                                     <td className="text-center">
-                                                        {color && <ColorSquare color={color} size={24} />}
+                                                        {color && (
+                                                            useCarPicker ? (
+                                                                <ColorCarPicker
+                                                                    value={color}
+                                                                    onChange={() => { }}
+                                                                    availableColors={AVAILABLE_COLORS.map(c => ({ name: c, value: c }))}
+                                                                    tableColors={[]}
+                                                                    currentIndex={0}
+                                                                />
+                                                            ) : (
+                                                                <ColorSquare color={color} size={24} />
+                                                            )
+                                                        )}
                                                     </td>
                                                     <td className="text-center">{result.points}</td>
                                                 </tr>
