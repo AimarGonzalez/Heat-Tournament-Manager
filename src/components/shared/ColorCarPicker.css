@@ -1,15 +1,16 @@
 /* Extend the color picker CSS with some car-specific adjustments */
 
 .custom-color-picker .car-item {
-    margin: 4px;
-    width: 56px;
-    height: 30px;
+    margin: 0px;
+    width: 65px;
+    height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #f8f9fa;
     border-radius: 5px;
     transition: all 0.2s ease;
+    padding: 2px; /* Custom padding for car items */
 }
 
 .custom-color-picker .car-item:hover {
@@ -24,24 +25,26 @@
 
 /* Ensure the button display shows the car properly */
 .custom-color-picker .dropdown-toggle {
-    height: 46px;
+    height: 36px;
+    width: 65px;
     display: flex;
     align-items: center;
+    padding-left: 2px; /* Custom padding for dropdown toggle */
 }
 
 /* Make car grid wider */
 .custom-color-picker .car-grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
     padding: 4px;
     width: auto;
-    min-width: 100px;
+    min-width: 140px;
 }
 
 /* Wider dropdown menu for cars */
 .custom-color-picker .dropdown-menu.show {
-    min-width: 120px;
+    min-width: 140px;
 }
 
 /* Hover effects for cars */

@@ -37,7 +37,7 @@ const ColorCarSquare: React.FC<ColorCarSquareProps> = ({ color, size = 16, class
     if (!image) return null;
 
     // Size the car based on width to maintain aspect ratio
-    const adjustedWidth = Math.round(size * 2);
+    const adjustedWidth = Math.round(size * 2.5 );
 
     return (
         <img
