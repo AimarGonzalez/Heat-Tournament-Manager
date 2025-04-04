@@ -49,28 +49,36 @@
 
 /* Tab navigation styles */
 .tournament-nav {
-    border-bottom: none;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .tournament-nav .nav-link {
-    padding: 0.5rem 1rem;
-    border-radius: 0;
-    color: #495057;
-    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.7);
     transition: all 0.2s ease;
-    cursor: pointer;
+    color: #6c757d;
 }
 
 .tournament-nav .nav-link.active {
-    color: #007bff;
-    background-color: transparent;
+    color: #0d6efd;
+    background-color: #e6f0ff;
     border-color: #dee2e6 #dee2e6 #fff;
-    font-weight: 500;
+    border-bottom: 3px solid #0d6efd;
+    border-left: none;
+    margin-bottom: -3px;
 }
 
 .tournament-nav .nav-link:hover:not(.active) {
-    background-color: rgba(0, 123, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.85);
     border-color: transparent;
+    color: #495057;
 }
 
 /* Additional styles for the active/selected tournament in the list */
