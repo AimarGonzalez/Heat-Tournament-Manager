@@ -42,6 +42,7 @@ export interface Tournament {
     rounds: TournamentRound[];
     type: 'live' | 'simulation';
     completed: boolean;
+    archived?: boolean; // Indicates if the tournament is archived (removed from active view)
     rankings?: {
         playerId: string;
         totalPoints: number;

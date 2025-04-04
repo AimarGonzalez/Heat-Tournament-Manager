@@ -37,3 +37,111 @@
         margin-top: 1rem;
     }
 }
+
+.tournament-history-container {
+    padding: 20px;
+}
+
+.history-card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.tournament-history-list .tournament-info {
+    flex: 1;
+}
+
+.tournament-history-list .history-item {
+    padding: 12px 15px;
+    border-left: none;
+    border-right: none;
+}
+
+.tournament-winner {
+    font-size: 0.9rem;
+    margin-top: 3px;
+    color: #555;
+}
+
+.tournament-type-badge {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.tournament-details-subtitle {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-sort-controls {
+    display: flex;
+    align-items: center;
+}
+
+.archived-badge {
+    color: #856404;
+    background-color: #fff3cd;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+
+.tournament-actions {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.detail-view-header h4 {
+    font-weight: 500;
+}
+
+.detail-view-header .archived-badge {
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.tournament-container {
+    margin: 0;
+    height: 100%;
+}
+
+/* Tournament list card in sidebar */
+.sidebar-column {
+    padding-right: 20px;
+    border-right: 1px solid #e9ecef;
+    min-height: 100vh;
+    margin-bottom: 20px;
+}
+
+.tournament-list-card {
+    height: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tournament-list {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+}
+
+.tournament-name-container.active {
+    font-weight: 500;
+    color: #0d6efd;
+}
+
+.tournament-name-container .tournament-status {
+    margin-left: auto;
+}
+
+/* Content column */
+.content-column {
+    padding-left: 20px;
+}

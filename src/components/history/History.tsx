@@ -1,24 +1,54 @@
 import { useState, useEffect } from 'react';
-import { Card, Table, Badge, Form, InputGroup, Button, Modal } from 'react-bootstrap';
+import { Button, Card, ListGroup, Row, Col, Nav, DropdownButton, Dropdown } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
-import TournamentResults from '../shared/TournamentResults';
-import { Tournament } from '../../models/types';
+import { Tournament, Player } from '../../models/types';
 import './History.css';
+import '../live-tournaments/LiveTournaments.css'; // Import live tournament styles for status badges
+import TournamentPlayerInscription from '../live-tournaments/TournamentPlayerInscription';
+import TournamentRoundResults from '../live-tournaments/TournamentRoundResults';
+import TournamentResultsTable from '../live-tournaments/TournamentResultsTable';
 
 function History() {
-    const { state } = useAppContext();
-    const [searchTerm, setSearchTerm] = useState('');
+    const { state, restoreTournament } = useAppContext();
+    const [tournaments, setTournaments] = useState<Tournament[]>([]);
     const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [activeTournamentView, setActiveTournamentView] = useState<'inscription' | 'round1' | 'round2' | 'results'>('inscription');
+    const [sortOption, setSortOption] = useState<'date' | 'name'>('date');
+    const [filterOption, setFilterOption] = useState<'all' | 'live' | 'simulation' | 'archived'>('all');
 
-    // Sort all tournaments by date (newest first)
-    const sortedTournaments = [...state.tournaments]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    useEffect(() => {
+        let filtered = [...state.tournaments];
 
-    // Filter tournaments based on search term
-    const filteredTournaments = sortedTournaments.filter(tournament =>
-        tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        // Apply filter
+        if (filterOption === 'live') {
+            filtered = filtered.filter(t => t.type === 'live' && !t.archived);
+        } else if (filterOption === 'simulation') {
+            filtered = filtered.filter(t => t.type === 'simulation');
+        } else if (filterOption === 'archived') {
+            filtered = filtered.filter(t => t.archived);
+        }
+
+        // Apply sort
+        if (sortOption === 'date') {
+            filtered = filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        } else {
+            filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        setTournaments(filtered);
+    }, [state.tournaments, sortOption, filterOption]);
+
+    // Add an effect to keep the selectedTournament in sync with state.tournaments
+    useEffect(() => {
+        // If we have a selected tournament, make sure it's synchronized with the latest data
+        if (selectedTournament) {
+            const updatedTournament = state.tournaments.find(t => t.id === selectedTournament.id);
+            if (updatedTournament && JSON.stringify(updatedTournament) !== JSON.stringify(selectedTournament)) {
+                // Update the selected tournament with the latest data
+                setSelectedTournament(updatedTournament);
+            }
+        }
+    }, [state.tournaments, selectedTournament]);
 
     // Format date for display
     const formatDate = (dateString: string): string => {
@@ -36,186 +66,304 @@ function History() {
         }
     };
 
-    // Get tournament winner
-    const getWinner = (tournament: Tournament): string => {
-        if (!tournament.rounds || tournament.rounds.length < 2) {
-            return 'In Progress';
-        }
-
-        // Find the player with the highest total score
-        let highestScore = -1;
-        let winnerName = 'Unknown';
-
-        tournament.players.forEach(player => {
-            let totalPoints = 0;
-            let totalBonus = 0;
-
-            // Add up points from all rounds
-            tournament.rounds.forEach(round => {
-                Object.values(round.tables).forEach(table => {
-                    const result = table.results.find(r => r.playerId === player.id);
-                    if (result) {
-                        totalPoints += result.points;
-                    }
-                });
-
-                // Add bonus if available
-                if (round.difficultyBonus && round.difficultyBonus[player.id] !== undefined) {
-                    totalBonus += round.difficultyBonus[player.id];
-                }
-            });
-
-            const finalScore = totalPoints + totalBonus;
-            if (finalScore > highestScore) {
-                highestScore = finalScore;
-                winnerName = player.name;
-            }
-        });
-
-        return winnerName;
-    };
-
-    const handleViewDetails = (tournament: Tournament) => {
-        setSelectedTournament(tournament);
-        setShowDetailsModal(true);
-    };
-
-    const closeDetailsModal = () => {
-        setShowDetailsModal(false);
-        setSelectedTournament(null);
-    };
-
+    // Get status badge with consistent styling from LiveTournaments
     const getStatusBadge = (tournament: Tournament) => {
         if (tournament.completed) {
-            return <Badge bg="success">Completed</Badge>;
-        } else if (tournament.rounds.length === 0) {
-            return <Badge bg="warning">Setup</Badge>;
-        } else if (tournament.rounds.length === 1) {
-            return <Badge bg="primary">Round 1</Badge>;
-        } else {
-            return <Badge bg="info">Round 2</Badge>;
+            return <span className="tournament-status status-finished">Finished</span>;
         }
+
+        if (tournament.rounds.length === 1) {
+            return <span className="tournament-status status-round2">Round 2</span>;
+        }
+
+        if (tournament.rounds.length === 0 && tournament.players.length > 0) {
+            return <span className="tournament-status status-round1">Round 1</span>;
+        }
+
+        return <span className="tournament-status status-waiting">Waiting Players</span>;
+    };
+
+    // Find winner based on points
+    const determineWinner = (tournament: Tournament): Player | null => {
+        if (!tournament.completed || tournament.players.length === 0) {
+            return null;
+        }
+
+        // Sort players by total points descending
+        const sortedPlayers = [...tournament.players].sort((a, b) => {
+            const pointsA = tournament.rounds.reduce((total, round) => {
+                let roundPoints = 0;
+                // Iterate through tables to find player results
+                Object.values(round.tables).forEach(table => {
+                    const result = table.results.find(r => r.playerId === a.id);
+                    if (result) {
+                        roundPoints += result.points;
+                    }
+                });
+                return total + roundPoints;
+            }, 0);
+
+            const pointsB = tournament.rounds.reduce((total, round) => {
+                let roundPoints = 0;
+                // Iterate through tables to find player results
+                Object.values(round.tables).forEach(table => {
+                    const result = table.results.find(r => r.playerId === b.id);
+                    if (result) {
+                        roundPoints += result.points;
+                    }
+                });
+                return total + roundPoints;
+            }, 0);
+
+            return pointsB - pointsA;
+        });
+
+        return sortedPlayers[0] || null;
+    };
+
+    const handleSelectTournament = (tournament: Tournament) => {
+        setSelectedTournament(tournament);
+
+        // Determine which view to show based on tournament state
+        if (tournament.players.length === 0) {
+            setActiveTournamentView('inscription');
+        } else if (tournament.rounds.length === 0) {
+            setActiveTournamentView('round1');
+        } else if (tournament.rounds.length === 1) {
+            setActiveTournamentView('round2');
+        } else {
+            setActiveTournamentView('results');
+        }
+    };
+
+    const handleRestoreTournament = (tournament: Tournament, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (confirm('Restore this tournament to the Live Tournaments list?')) {
+            restoreTournament(tournament.id);
+        }
+    };
+
+    // Determine available navigation options based on tournament state
+    const getAvailableViews = () => {
+        if (!selectedTournament) return [];
+
+        const views = [];
+
+        // Players inscription is always available
+        views.push({ id: 'inscription', label: 'Players' });
+
+        // Round 1 is available if there are players
+        if (selectedTournament.players.length > 0) {
+            views.push({ id: 'round1', label: 'Round 1' });
+        }
+
+        // Round 2 is available if round 1 is completed
+        if (selectedTournament.rounds.length >= 1) {
+            views.push({ id: 'round2', label: 'Round 2' });
+        }
+
+        // Results are available if round 2 is completed
+        if (selectedTournament.rounds.length >= 2) {
+            views.push({ id: 'results', label: 'Final Results' });
+        }
+
+        return views;
     };
 
     return (
-        <div className="history-container">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">Tournament History</h4>
-                <div className="search-container">
-                    <InputGroup>
-                        <Form.Control
-                            placeholder="Search tournaments"
-                            aria-label="Search tournaments"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <InputGroup.Text>
-                            <i className="bi bi-search"></i>
-                        </InputGroup.Text>
-                    </InputGroup>
-                </div>
-            </div>
-
-            <Card>
-                <Card.Header>All Tournaments</Card.Header>
-                <div className="table-responsive">
-                    <Table hover>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Tournament Name</th>
-                                <th>Players</th>
-                                <th>Winner</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredTournaments.length > 0 ? (
-                                filteredTournaments.map((tournament) => (
-                                    <tr key={tournament.id}>
-                                        <td>{formatDate(tournament.date)}</td>
-                                        <td>{tournament.name}</td>
-                                        <td>{tournament.players.length}</td>
-                                        <td>{getWinner(tournament)}</td>
-                                        <td>
-                                            <Badge bg={tournament.type === 'live' ? 'success' : 'info'}>
-                                                {tournament.type === 'live' ? 'Live' : 'Simulation'}
-                                            </Badge>
-                                        </td>
-                                        <td>{getStatusBadge(tournament)}</td>
-                                        <td>
-                                            <Button
-                                                variant="link"
-                                                className="p-0 text-decoration-none"
-                                                onClick={() => handleViewDetails(tournament)}
-                                            >
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr className="text-center text-muted">
-                                    <td colSpan={7}>No tournaments found</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                </div>
-            </Card>
-
-            {/* Tournament Details Modal */}
-            <Modal
-                show={showDetailsModal}
-                onHide={closeDetailsModal}
-                size="lg"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {selectedTournament?.name}
-                        <Badge
-                            bg={selectedTournament?.type === 'live' ? 'success' : 'info'}
-                            className="ms-2"
-                        >
-                            {selectedTournament?.type === 'live' ? 'Live' : 'Simulation'}
-                        </Badge>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedTournament && (
-                        <div>
-                            <div className="tournament-info-section mb-3">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <p><strong>Date:</strong> {formatDate(selectedTournament.date)}</p>
-                                        <p><strong>Players:</strong> {selectedTournament.players.length}</p>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <p><strong>Status:</strong> {selectedTournament.completed ? 'Completed' : 'In Progress'}</p>
-                                        <p><strong>Winner:</strong> {getWinner(selectedTournament)}</p>
-                                    </div>
+        <div className="tournament-container">
+            <Row>
+                <Col lg={3} className="sidebar-column">
+                    <Card className="tournament-list-card">
+                        <Card.Header>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <span>Tournament History</span>
+                                <div className="filter-sort-controls">
+                                    <DropdownButton
+                                        variant="outline-secondary"
+                                        size="sm"
+                                        title={`Filter: ${filterOption === 'all' ? 'All' : filterOption === 'live' ? 'Live' : filterOption === 'simulation' ? 'Simulation' : 'Archived'}`}
+                                        className="me-2"
+                                    >
+                                        <Dropdown.Item onClick={() => setFilterOption('all')}>All</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => setFilterOption('live')}>Live</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => setFilterOption('simulation')}>Simulation</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => setFilterOption('archived')}>Archived</Dropdown.Item>
+                                    </DropdownButton>
                                 </div>
                             </div>
-
-                            {selectedTournament.rounds.length === 2 ? (
-                                <TournamentResults tournament={selectedTournament} title="Tournament Results" />
-                            ) : (
-                                <div className="alert alert-info">
-                                    This tournament is still in progress. Results will be available when both rounds are completed.
+                        </Card.Header>
+                        <Card.Header className="bg-light p-2">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <DropdownButton
+                                    variant="outline-secondary"
+                                    size="sm"
+                                    title={`Sort by: ${sortOption === 'date' ? 'Date' : 'Name'}`}
+                                >
+                                    <Dropdown.Item onClick={() => setSortOption('date')}>Date</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setSortOption('name')}>Name</Dropdown.Item>
+                                </DropdownButton>
+                            </div>
+                        </Card.Header>
+                        <Card.Body className="p-0">
+                            {tournaments.length === 0 ? (
+                                <div className="p-3 text-center text-muted">
+                                    No tournament history available.
                                 </div>
+                            ) : (
+                                <ListGroup variant="flush" className="tournament-list">
+                                    {tournaments.map((tournament) => {
+                                        const status = getStatusBadge(tournament);
+                                        const winner = determineWinner(tournament);
+
+                                        return (
+                                            <ListGroup.Item
+                                                key={tournament.id}
+                                                as="div"
+                                                className="d-flex justify-content-between align-items-start"
+                                            >
+                                                <div
+                                                    className="tournament-info flex-grow-1"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => handleSelectTournament(tournament)}
+                                                >
+                                                    <div className={`tournament-name-container ${selectedTournament?.id === tournament.id ? 'active' : ''}`}>
+                                                        <div className="tournament-name">
+                                                            {tournament.name}
+                                                            {tournament.archived && <span className="archived-badge ms-2">(Archived)</span>}
+                                                        </div>
+                                                        {status}
+                                                    </div>
+                                                    <div className="tournament-date">
+                                                        <span title={formatDate(tournament.date)}>
+                                                            {formatDate(tournament.date)}
+                                                        </span>
+                                                        <span className="tournament-type-badge ms-2">
+                                                            {tournament.type === 'live' ? 'Live' : 'Sim'}
+                                                        </span>
+                                                    </div>
+                                                    {winner && (
+                                                        <div className="tournament-winner">
+                                                            Winner: <strong>{winner.name}</strong>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {tournament.archived && (
+                                                    <Button
+                                                        variant="outline-success"
+                                                        size="sm"
+                                                        title="Restore Tournament"
+                                                        onClick={(e) => handleRestoreTournament(tournament, e)}
+                                                    >
+                                                        <i className="bi bi-arrow-counterclockwise"></i>
+                                                    </Button>
+                                                )}
+                                            </ListGroup.Item>
+                                        );
+                                    })}
+                                </ListGroup>
                             )}
-                        </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                <Col lg={9} className="content-column">
+                    {selectedTournament ? (
+                        <>
+                            <Card className="mb-3">
+                                <Card.Body className="p-3">
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 className="mb-0">
+                                                {selectedTournament.name}
+                                                {selectedTournament.archived && <span className="archived-badge ms-2">(Archived)</span>}
+                                            </h5>
+                                            <div className="tournament-details-subtitle">
+                                                <span>{formatDate(selectedTournament.date)}</span>
+                                                <span className="mx-1">•</span>
+                                                <span>{selectedTournament.type === 'live' ? 'Live Tournament' : 'Simulation'}</span>
+                                            </div>
+                                        </div>
+                                        {selectedTournament.archived && (
+                                            <Button
+                                                variant="success"
+                                                size="sm"
+                                                onClick={() => {
+                                                    restoreTournament(selectedTournament.id);
+                                                }}
+                                            >
+                                                <i className="bi bi-arrow-counterclockwise me-1"></i>
+                                                Restore Tournament
+                                            </Button>
+                                        )}
+                                    </div>
+                                </Card.Body>
+                            </Card>
+
+                            {/* Navigation tabs for tournament sections */}
+                            <Card className="mb-3">
+                                <Card.Body className="p-2">
+                                    <Nav variant="tabs" className="tournament-nav">
+                                        {getAvailableViews().map(view => (
+                                            <Nav.Item key={view.id}>
+                                                <Nav.Link
+                                                    active={activeTournamentView === view.id}
+                                                    onClick={() => setActiveTournamentView(view.id as any)}
+                                                >
+                                                    {view.label}
+                                                </Nav.Link>
+                                            </Nav.Item>
+                                        ))}
+                                    </Nav>
+                                </Card.Body>
+                            </Card>
+
+                            {activeTournamentView === 'inscription' && (
+                                <TournamentPlayerInscription
+                                    key={`inscription-${selectedTournament.id}`}
+                                    tournament={selectedTournament}
+                                    onComplete={() => setActiveTournamentView('round1')}
+                                />
+                            )}
+
+                            {activeTournamentView === 'round1' && (
+                                <TournamentRoundResults
+                                    key={`round1-${selectedTournament.id}`}
+                                    tournament={selectedTournament}
+                                    roundNumber={1}
+                                    onComplete={() => setActiveTournamentView('round2')}
+                                    isEdit={selectedTournament.rounds.length >= 1}
+                                />
+                            )}
+
+                            {activeTournamentView === 'round2' && (
+                                <TournamentRoundResults
+                                    key={`round2-${selectedTournament.id}`}
+                                    tournament={selectedTournament}
+                                    roundNumber={2}
+                                    onComplete={() => setActiveTournamentView('results')}
+                                    isEdit={selectedTournament.rounds.length >= 2}
+                                />
+                            )}
+
+                            {activeTournamentView === 'results' && (
+                                <TournamentResultsTable
+                                    key={`results-${selectedTournament.id}`}
+                                    tournament={selectedTournament}
+                                />
+                            )}
+                        </>
+                    ) : (
+                        <Card>
+                            <Card.Body className="text-center">
+                                <p className="my-5 text-muted">
+                                    Select a tournament from the list to view details.
+                                </p>
+                            </Card.Body>
+                        </Card>
                     )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={closeDetailsModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                </Col>
+            </Row>
         </div>
     );
 }

@@ -10,13 +10,14 @@ import './LiveTournaments.css';
 import './TournamentPlayerInscription.css';
 
 function LiveTournaments() {
-    const { state, createTournament, deleteTournament, setActiveTournament, activeTournament } = useAppContext();
+    const { state, createTournament, archiveTournament, setActiveTournament, activeTournament } = useAppContext();
     const [activeTournamentView, setActiveTournamentView] = useState<'inscription' | 'round1' | 'round2' | 'results'>('inscription');
     const [showRecoveryMessage, setShowRecoveryMessage] = useState(false);
 
     // Filter only live tournaments (not simulations) and sort by date (newest first)
+    // Also filter out archived tournaments
     const liveTournaments = state.tournaments
-        .filter(t => t.type === 'live')
+        .filter(t => t.type === 'live' && !t.archived)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     // Check if we need to show the recovery message
@@ -43,6 +44,23 @@ function LiveTournaments() {
         } catch (e) {
             return dateString;
         }
+    };
+
+    // Get tournament status label and class
+    const getTournamentStatus = (tournament: Tournament): { label: string; className: string } => {
+        if (tournament.completed) {
+            return { label: "Finished", className: "status-finished" };
+        }
+
+        if (tournament.rounds.length === 1) {
+            return { label: "Round 2", className: "status-round2" };
+        }
+
+        if (tournament.rounds.length === 0 && tournament.players.length > 0) {
+            return { label: "Round 1", className: "status-round1" };
+        }
+
+        return { label: "Waiting Players", className: "status-waiting" };
     };
 
     const handleCreateNewTournament = () => {
@@ -73,9 +91,11 @@ function LiveTournaments() {
         }
     };
 
-    const handleDeleteTournament = (id: string, e: React.MouseEvent) => {
+    const handleArchiveTournament = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        deleteTournament(id);
+        if (confirm('Archive this tournament? It will be moved to the History view where it can be restored later.')) {
+            archiveTournament(id);
+        }
     };
 
     const handleRestoreData = () => {
@@ -152,27 +172,39 @@ function LiveTournaments() {
                                 </div>
                             ) : (
                                 <ListGroup variant="flush" className="tournament-list">
-                                    {liveTournaments.map((tournament) => (
-                                        <ListGroup.Item
-                                            key={tournament.id}
-                                            action
-                                            active={activeTournament?.id === tournament.id}
-                                            onClick={() => handleSelectTournament(tournament)}
-                                            className="d-flex justify-content-between align-items-start"
-                                        >
-                                            <div className="tournament-info">
-                                                <div className="tournament-name">{tournament.name}</div>
-                                                <div className="tournament-date">{formatDate(tournament.date)}</div>
-                                            </div>
-                                            <Button
-                                                variant="outline-danger"
-                                                size="sm"
-                                                onClick={(e) => handleDeleteTournament(tournament.id, e)}
+                                    {liveTournaments.map((tournament) => {
+                                        const status = getTournamentStatus(tournament);
+
+                                        return (
+                                            <ListGroup.Item
+                                                key={tournament.id}
+                                                as="div"
+                                                className="d-flex justify-content-between align-items-start"
                                             >
-                                                ×
-                                            </Button>
-                                        </ListGroup.Item>
-                                    ))}
+                                                <div
+                                                    className="tournament-info flex-grow-1"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => handleSelectTournament(tournament)}
+                                                >
+                                                    <div className={`tournament-name-container ${activeTournament?.id === tournament.id ? 'active' : ''}`}>
+                                                        <div className="tournament-name">{tournament.name}</div>
+                                                        <div className={`tournament-status ${status.className}`}>
+                                                            {status.label}
+                                                        </div>
+                                                    </div>
+                                                    <div className="tournament-date">{formatDate(tournament.date)}</div>
+                                                </div>
+                                                <Button
+                                                    variant="outline-secondary"
+                                                    size="sm"
+                                                    title="Archive Tournament"
+                                                    onClick={(e) => handleArchiveTournament(tournament.id, e)}
+                                                >
+                                                    <i className="bi bi-archive"></i>
+                                                </Button>
+                                            </ListGroup.Item>
+                                        );
+                                    })}
                                 </ListGroup>
                             )}
                         </Card.Body>

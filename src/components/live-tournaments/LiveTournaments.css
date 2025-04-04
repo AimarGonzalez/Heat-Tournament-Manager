@@ -117,3 +117,40 @@
         max-height: 300px;
     }
 }
+
+/* Tournament status labels */
+.tournament-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: auto;
+    vertical-align: middle;
+}
+
+.status-waiting,
+.status-round1,
+.status-round2 {
+    background-color: #FFEB3B;
+    /* Yellow */
+    color: #806600;
+}
+
+.status-finished {
+    background-color: #90EE90;
+    /* Pistachio green */
+    color: #2c6e2c;
+}
+
+/* Adjusted tournament name container to allow for inline label */
+.tournament-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}

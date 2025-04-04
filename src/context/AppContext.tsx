@@ -23,6 +23,8 @@ interface AppContextType {
     setActiveTournament: (tournament: Tournament | undefined) => void;
     createTournament: (name: string, players: Player[], type: 'live' | 'simulation') => Tournament;
     updateTournament: (tournament: Tournament) => void;
+    archiveTournament: (id: string) => void;
+    restoreTournament: (id: string) => void;
     deleteTournament: (id: string) => void;
     refreshAppState: () => void;
     autoRestorePerformed: boolean;
@@ -126,21 +128,46 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         return newTournament;
     };
 
-    // Update an existing tournament
-    const updateTournament = (updatedTournament: Tournament) => {
+    // Update a tournament
+    const updateTournament = (tournament: Tournament) => {
         setState(prev => ({
             ...prev,
             tournaments: prev.tournaments.map(t =>
-                t.id === updatedTournament.id ? updatedTournament : t
+                t.id === tournament.id ? tournament : t
             ),
         }));
 
-        if (activeTournament?.id === updatedTournament.id) {
-            setActiveTournament(updatedTournament);
+        // Update activeTournament if it's the same tournament
+        if (activeTournament?.id === tournament.id) {
+            setActiveTournament(tournament);
         }
     };
 
-    // Delete a tournament
+    // Archive a tournament (mark as archived instead of deleting)
+    const archiveTournament = (id: string) => {
+        setState(prev => ({
+            ...prev,
+            tournaments: prev.tournaments.map(t =>
+                t.id === id ? { ...t, archived: true } : t
+            ),
+        }));
+
+        if (activeTournament?.id === id) {
+            setActiveTournament(undefined);
+        }
+    };
+
+    // Restore an archived tournament
+    const restoreTournament = (id: string) => {
+        setState(prev => ({
+            ...prev,
+            tournaments: prev.tournaments.map(t =>
+                t.id === id ? { ...t, archived: false } : t
+            ),
+        }));
+    };
+
+    // Update the original delete method (keep for backward compatibility)
     const deleteTournament = (id: string) => {
         setState(prev => ({
             ...prev,
@@ -158,6 +185,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         setActiveTournament,
         createTournament,
         updateTournament,
+        archiveTournament,
+        restoreTournament,
         deleteTournament,
         refreshAppState,
         autoRestorePerformed,

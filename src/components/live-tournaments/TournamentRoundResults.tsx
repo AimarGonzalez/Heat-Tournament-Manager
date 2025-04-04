@@ -132,6 +132,76 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
         );
     }, [tables, tournament.id, roundNumber]);
 
+    // Auto-save changes for tournaments with existing rounds data
+    useEffect(() => {
+        // Don't auto-save if this is a new round (not editing) or if tables aren't fully loaded
+        if (!isEdit || !tables.length) return;
+
+        // Validate tables have proper data before saving
+        const hasValidPlayerAssignments = tables.some(table =>
+            table.playerSlots.some(playerId => playerId !== null));
+
+        // Only save if we have some assigned players
+        if (hasValidPlayerAssignments) {
+            // Create round results
+            const roundResults: TournamentRound = {
+                roundNumber,
+                tables: {}
+            };
+
+            // Process each table
+            tables.forEach(table => {
+                const results: GameResult[] = [];
+                const playerColors: { [playerId: string]: string } = {};
+
+                // Create game results for each player at the table
+                table.playerSlots.forEach((playerId, index) => {
+                    if (playerId && table.positions[index]) {
+                        const position = table.positions[index] as number;
+                        results.push({
+                            playerId,
+                            position,
+                            points: calculatePointsFromPosition(position)
+                        });
+
+                        // Save player color if available
+                        if (table.playerColors[index]) {
+                            playerColors[playerId] = table.playerColors[index] as string;
+                        }
+                    }
+                });
+
+                if (results.length > 0) {
+                    roundResults.tables[table.tableId] = {
+                        players: table.playerSlots.filter(Boolean) as string[],
+                        results,
+                        playerColors // Add colors to the tournament data
+                    };
+                }
+            });
+
+            // Only update if we have results
+            if (Object.keys(roundResults.tables).length > 0) {
+                // When editing an existing round, replace it in the tournament
+                const updatedRounds = [...tournament.rounds];
+                const roundIndex = updatedRounds.findIndex(r => r.roundNumber === roundNumber);
+
+                if (roundIndex !== -1) {
+                    updatedRounds[roundIndex] = roundResults;
+
+                    const updatedTournament = {
+                        ...tournament,
+                        rounds: updatedRounds
+                    };
+
+                    // Recalculate bonuses after editing
+                    const finalTournament = calculateFinalBonuses(updatedTournament);
+                    updateTournament(finalTournament);
+                }
+            }
+        }
+    }, [tables, isEdit, tournament, roundNumber, updateTournament]);
+
     // Available colors for the color picker
     const availableColors = [
         { name: 'Red', value: 'red' },

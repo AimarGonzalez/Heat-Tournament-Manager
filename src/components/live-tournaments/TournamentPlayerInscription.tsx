@@ -38,8 +38,8 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
 
     // Auto save changes when tournament name or player names change
     useEffect(() => {
-        // Only save changes if we're editing an existing tournament with players
-        if (!isEditing && tournament.players.length > 0) {
+        // Always save changes for tournaments with existing players
+        if (tournament.players.length > 0) {
             const updatedTournament = {
                 ...tournament,
                 name: tournamentName,
@@ -50,7 +50,7 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
             };
             updateTournament(updatedTournament);
         }
-    }, [tournamentName, playerNames, isEditing, tournament.players.length]);
+    }, [tournamentName, playerNames, tournament, updateTournament]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
