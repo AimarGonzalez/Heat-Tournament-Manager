@@ -42,13 +42,24 @@ h2 {
   border: 1px solid transparent;
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+  color: #6c757d;
 }
 
 .nav-tabs .nav-link.active {
-  color: #495057;
-  background-color: #fff;
+  color: #0d6efd;
+  background-color: #e6f0ff;
   border-color: #dee2e6 #dee2e6 #fff;
-  border-bottom: 2px solid #3498db;
+  border-bottom: 3px solid #0d6efd;
+  border-left: none;
+  margin-bottom: -3px;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: transparent;
+  color: #495057;
 }
 
 .tab-content {
