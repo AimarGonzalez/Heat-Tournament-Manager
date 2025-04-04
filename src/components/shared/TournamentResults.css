@@ -155,7 +155,7 @@
     display: inline-flex;
 }
 
-@media (orientation: portrait) {
+@media (max-width: 576px) {
     .score-cell .position-tag {
         margin-right: 0px;
         min-width: 40px;
@@ -232,7 +232,7 @@
 }
 
 /* Media query for portrait orientation - smaller font size for tournament results */
-@media (orientation: portrait) {
+@media (max-width: 576px) {
     .tournament-results-table {
         font-size: 0.7rem;
     }

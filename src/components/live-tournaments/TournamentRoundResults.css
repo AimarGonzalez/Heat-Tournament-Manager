@@ -207,7 +207,7 @@ tr {
 }
 
 /* Media query for portrait orientation - smaller font size for round results */
-@media (orientation: portrait) {
+@media (max-width: 576px) {
     .round-results-table {
         font-size: 0.7rem;
     }

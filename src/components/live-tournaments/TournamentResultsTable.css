@@ -377,7 +377,7 @@ td .position-tag:hover {
 }
 
 /* Media query for portrait orientation - smaller font size for tournament results */
-@media (orientation: portrait) {
+@media (max-width: 576px) {
     .tournament-results-table {
         font-size: 0.7rem;
     }

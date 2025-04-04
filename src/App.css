@@ -5,7 +5,7 @@
 }
 
 /* Add media query for portrait orientation */
-@media (orientation: portrait) {
+@media (max-width: 576px) {
   #root {
     padding: 2px;
   }
@@ -193,9 +193,11 @@ h2 {
 
 /* For very small screens */
 @media (max-width: 576px) {
-  .sidebar-column, .content-column {
-      padding-left: 0px !important;
-      padding-right: 0px !important;
+
+  .sidebar-column,
+  .content-column {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
   }
 }
 
