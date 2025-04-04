@@ -4,6 +4,7 @@ import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player } from '../../models/types';
 import './History.css';
 import '../live-tournaments/LiveTournaments.css'; // Import live tournament styles for status badges
+import '../shared/TournamentDetailTabs.css';
 import TournamentPlayerInscription from '../live-tournaments/TournamentPlayerInscription';
 import TournamentRoundResults from '../live-tournaments/TournamentRoundResults';
 import TournamentResultsTable from '../live-tournaments/TournamentResultsTable';
@@ -329,8 +330,8 @@ function History() {
                             </Card>
 
                             {/* Navigation tabs for tournament sections */}
-                            <Card className="mb-2">
-                                <Card.Body className="p-1">
+                            <Card className="tournament-detail-tabs">
+                                <Card.Body>
                                     <Nav variant="tabs" className="tournament-nav">
                                         {getAvailableViews().map(view => (
                                             <Nav.Item key={view.id}>

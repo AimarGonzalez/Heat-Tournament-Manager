@@ -8,6 +8,7 @@ import TournamentResultsTable from './TournamentResultsTable';
 import { restoreFromAutoBackup } from '../../services/storageService';
 import './LiveTournaments.css';
 import './TournamentPlayerInscription.css';
+import '../shared/TournamentDetailTabs.css';
 
 function LiveTournaments() {
     const { state, createTournament, archiveTournament, setActiveTournament, activeTournament } = useAppContext();
@@ -223,8 +224,8 @@ function LiveTournaments() {
                     {activeTournament ? (
                         <>
                             {/* Navigation tabs for tournament sections */}
-                            <Card className="mb-3">
-                                <Card.Body className="p-2">
+                            <Card className="tournament-detail-tabs">
+                                <Card.Body>
                                     <Nav variant="tabs" className="tournament-nav">
                                         {getAvailableViews().map(view => (
                                             <Nav.Item key={view.id}>
