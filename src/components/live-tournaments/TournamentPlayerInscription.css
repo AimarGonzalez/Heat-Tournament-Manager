@@ -3,12 +3,11 @@
 }
 
 .section-header {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 500;
     color: #212529;
     display: block;
-    padding-bottom: 8px;
-    margin-bottom: 1rem !important;
+    margin-top: 1rem !important;
 }
 
 .player-grid {
