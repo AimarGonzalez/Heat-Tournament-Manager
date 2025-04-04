@@ -11,6 +11,19 @@ export const DEFAULT_ROUNDS_COUNT = 2;
 // Scoring values
 export const POSITION_POINTS = [9, 6, 4, 3, 2, 1];
 
+// Dwarven name lists for the generator
+export const DWARVEN_FIRST_NAMES = [
+    'Thorin', 'Balin', 'Dwalin', 'Fili', 'Kili', 'Bombur', 'Bofur', 'Bifur', 'Gloin', 'Oin',
+    'Dori', 'Nori', 'Ori', 'Gimli', 'Durin', 'Thrain', 'Thror', 'Dain', 'Borin', 'Fundin'
+];
+
+export const DWARVEN_LAST_NAMES = [
+    'Escudoroble', 'Piedrohierro', 'Yelmorocoso', 'Manomartillo', 'Barbafuego', 'Barbalarga',
+    'Barbadura', 'Puñoroca', 'Puñopiedra', 'Martillobatalla', 'Forjahierro', 'Barbaoro',
+    'Hachaplatino', 'Mantorecio', 'Excavaprofundo', 'Yunquemar', 'Barbafuego', 'Miradacero',
+    'Guardamontaña', 'Cerraduranegra'
+];
+
 // Random player name generation
 export const FIRST_NAMES = [
     'James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Charles',
@@ -18,8 +31,8 @@ export const FIRST_NAMES = [
 ];
 
 export const LAST_NAMES = [
-    'Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor',
-    'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson'
+    'Herrero', 'Jiménez', 'Guillén', 'Gómez', 'Moreno', 'Díaz', 'Molina', 'Villanueva', 'Morales', 'Sastre',
+    'Andrade', 'Torres', 'Jaramillo', 'Blanco', 'Hernández', 'Martín', 'Tomás', 'García', 'Martínez', 'Ruiz'
 ];
 
 // UI Configuration

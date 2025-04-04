@@ -1,22 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { Form, Button, Card, Row, Col, Table, Alert } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player } from '../../models/types';
 import './TournamentPlayerInscription.css';
-
-// Dwarven name lists for autofill
-const DWARVEN_FIRST_NAMES = [
-    'Thorin', 'Balin', 'Dwalin', 'Fili', 'Kili', 'Bombur', 'Bofur', 'Bifur', 'Gloin', 'Oin',
-    'Dori', 'Nori', 'Ori', 'Gimli', 'Durin', 'Thrain', 'Thror', 'Dain', 'Borin', 'Fundin'
-];
-
-const DWARVEN_LAST_NAMES = [
-    'Oakenshield', 'Ironfoot', 'Stonehelm', 'Hammerhand', 'Firebeard', 'Longbeard',
-    'Stiffbeard', 'Stonefist', 'Rockfist', 'Battlehammer', 'Ironforge', 'Goldbeard',
-    'Silveraxe', 'Stoutmantle', 'Deepdelver', 'Anvilmar', 'Flamebeard', 'Steelgaze',
-    'Mountainkeeper', 'Blacklock'
-];
+import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
 
 interface TournamentPlayerInscriptionProps {
     tournament: Tournament;

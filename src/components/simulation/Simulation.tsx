@@ -6,20 +6,8 @@ import { Tournament, Player, TournamentRound, GameResult } from '../../models/ty
 import TournamentResultsTable from '../live-tournaments/TournamentResultsTable';
 import ColorSquare from '../live-tournaments/ColorSquare';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
+import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
 import './Simulation.css';
-
-// Dwarven name lists for the generator
-const DWARVEN_FIRST_NAMES = [
-    'Thorin', 'Balin', 'Dwalin', 'Fili', 'Kili', 'Bombur', 'Bofur', 'Bifur', 'Gloin', 'Oin',
-    'Dori', 'Nori', 'Ori', 'Gimli', 'Durin', 'Thrain', 'Thror', 'Dain', 'Borin', 'Fundin'
-];
-
-const DWARVEN_LAST_NAMES = [
-    'Oakenshield', 'Ironfoot', 'Stonehelm', 'Hammerhand', 'Firebeard', 'Longbeard',
-    'Stiffbeard', 'Stonefist', 'Rockfist', 'Battlehammer', 'Ironforge', 'Goldbeard',
-    'Silveraxe', 'Stoutmantle', 'Deepdelver', 'Anvilmar', 'Flamebeard', 'Steelgaze',
-    'Mountainkeeper', 'Blacklock'
-];
 
 // Available colors for randomization
 const AVAILABLE_COLORS = [
