@@ -145,3 +145,17 @@
 .content-column {
     padding-left: 20px;
 }
+
+.simulation-tournament {
+    color: #6c757d;
+    opacity: 0.8;
+}
+
+.simulation-tournament .tournament-name {
+    color: #6c757d;
+}
+
+.simulation-tournament .tournament-date,
+.simulation-tournament .tournament-winner {
+    color: #8c8c8c;
+}

@@ -92,9 +92,12 @@ function LiveTournaments() {
     };
 
     const handleArchiveTournament = (id: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (confirm('Archive this tournament? It will be moved to the History view where it can be restored later.')) {
-            archiveTournament(id);
+        e.stopPropagation(); // Prevent the parent ListGroupItem click event
+        archiveTournament(id);
+
+        // If the archived tournament is the active one, clear it
+        if (activeTournament?.id === id) {
+            setActiveTournament(undefined);
         }
     };
 

@@ -138,9 +138,7 @@ function History() {
 
     const handleRestoreTournament = (tournament: Tournament, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (confirm('Restore this tournament to the Live Tournaments list?')) {
-            restoreTournament(tournament.id);
-        }
+        restoreTournament(tournament.id);
     };
 
     // Determine available navigation options based on tournament state
@@ -223,14 +221,13 @@ function History() {
                                                 className="d-flex justify-content-between align-items-start"
                                             >
                                                 <div
-                                                    className="tournament-info flex-grow-1"
+                                                    className={`tournament-info flex-grow-1 ${tournament.type === 'simulation' ? 'simulation-tournament' : ''}`}
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={() => handleSelectTournament(tournament)}
                                                 >
                                                     <div className={`tournament-name-container ${selectedTournament?.id === tournament.id ? 'active' : ''}`}>
                                                         <div className="tournament-name">
                                                             {tournament.name}
-                                                            {tournament.archived && <span className="archived-badge ms-2">(Archived)</span>}
                                                         </div>
                                                         {status}
                                                     </div>
@@ -242,7 +239,7 @@ function History() {
                                                             {tournament.type === 'live' ? 'Live' : 'Sim'}
                                                         </span>
                                                     </div>
-                                                    {winner && (
+                                                    {winner && tournament.type !== 'simulation' && (
                                                         <div className="tournament-winner">
                                                             Winner: <strong>{winner.name}</strong>
                                                         </div>
