@@ -42,7 +42,7 @@ function App() {
           </Alert>
         )}
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-3 header-panel">
           <h1 className="mb-0" style={{ cursor: 'pointer' }} onClick={cycleBackground}>
             HEAT Tournament Manager
           </h1>
@@ -54,29 +54,31 @@ function App() {
 
         {showDebug && <LocalStorageViewer />}
 
-        <Tabs
-          id="main-navigation"
-          activeKey={key}
-          onSelect={(k) => k && setKey(k)}
-          className="mb-0"
-          fill
-        >
-          <Tab eventKey="liveTournaments" title="Live Tournaments">
-            <div className="p-1 tab-container">
-              <LiveTournaments />
-            </div>
-          </Tab>
-          <Tab eventKey="simulation" title="Simulation">
-            <div className="p-1 tab-container">
-              <Simulation />
-            </div>
-          </Tab>
-          <Tab eventKey="history" title="History">
-            <div className="p-1 tab-container">
-              <History />
-            </div>
-          </Tab>
-        </Tabs>
+        <div className="content-panel">
+          <Tabs
+            id="main-navigation"
+            activeKey={key}
+            onSelect={(k) => k && setKey(k)}
+            className="mb-0"
+            fill
+          >
+            <Tab eventKey="liveTournaments" title="Live Tournaments">
+              <div className="p-1 tab-container">
+                <LiveTournaments />
+              </div>
+            </Tab>
+            <Tab eventKey="simulation" title="Simulation">
+              <div className="p-1 tab-container">
+                <Simulation />
+              </div>
+            </Tab>
+            <Tab eventKey="history" title="History">
+              <div className="p-1 tab-container">
+                <History />
+              </div>
+            </Tab>
+          </Tabs>
+        </div>
       </div>
     </Container>
   )

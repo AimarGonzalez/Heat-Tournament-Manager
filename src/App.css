@@ -23,6 +23,7 @@ h2 {
 
 .tab-container {
   min-height: 600px;
+  padding: 16px;
 }
 
 .nav-tabs {
@@ -42,7 +43,7 @@ h2 {
   border: 1px solid transparent;
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(49, 49, 49, 0.039);
   transition: all 0.2s ease;
   color: #6c757d;
 }
@@ -67,7 +68,6 @@ h2 {
   border-top: none;
   border-radius: 0 0 4px 4px;
   padding: 5px 2px;
-  background-color: #fff;
 }
 
 .logo {
@@ -251,4 +251,24 @@ h2 {
     padding-left: 2px;
     padding-right: 2px;
   }
+}
+
+.header-panel,
+.content-panel {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.505);
+}
+
+.content-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.content-panel .nav-tabs {
+  padding: 12px 12px 0;
+  border-bottom: none;
+  /*background: rgba(255, 255, 255, 0.5);*/
 }

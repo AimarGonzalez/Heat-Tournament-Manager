@@ -134,6 +134,17 @@
         width: 100%;
         justify-content: center;
     }
+
+    .tournament-name-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tournament-name-container .tournament-status {
+        margin-left: 0 !important;
+        margin-top: 4px;
+        font-size: 0.65rem;
+    }
 }
 
 .tournament-list-card {
