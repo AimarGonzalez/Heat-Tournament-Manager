@@ -4,8 +4,8 @@ import backgroundPlayer from '../assets/background/background-player-matt.webp';
 import backgroundIllustration from '../assets/background/background-ilustration.webp';
 
 const backgrounds = [
-    backgroundTrack,
     backgroundPlayer,
+    backgroundTrack,
     backgroundIllustration
 ];
 
