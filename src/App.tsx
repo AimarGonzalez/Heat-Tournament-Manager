@@ -14,6 +14,7 @@ import Simulation from './components/simulation/Simulation'
 import History from './components/history/History'
 import DataManager from './components/common/DataManager'
 import LocalStorageViewer from './components/debug/LocalStorageViewer'
+import { useBackground } from './context/BackgroundContext'
 
 function App() {
   const [key, setKey] = useState('liveTournaments')
@@ -23,6 +24,7 @@ function App() {
 
   // Get car picker state and toggle function from context
   const { useCarPicker, toggleCarPickerStyle } = useColorPickerContext();
+  const { cycleBackground } = useBackground();
 
   // Show notification when data is auto-restored
   useEffect(() => {
@@ -58,7 +60,7 @@ function App() {
         )}
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h1 className="mb-0">
+          <h1 className="mb-0" style={{ cursor: 'pointer' }} onClick={cycleBackground}>
             HEAT Tournament Manager
             <button
               onClick={() => setShowDebug(!showDebug)}
