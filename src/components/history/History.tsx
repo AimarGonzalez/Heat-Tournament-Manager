@@ -237,7 +237,7 @@ function History() {
                                             <ListGroup.Item
                                                 key={tournament.id}
                                                 as="div"
-                                                className="d-flex justify-content-between align-items-start"
+                                                className={`d-flex justify-content-between align-items-start ${selectedTournament?.id === tournament.id ? 'selected-tournament' : ''}`}
                                             >
                                                 <div
                                                     className={`tournament-info flex-grow-1 ${tournament.type === 'simulation' ? 'simulation-tournament' : ''}`}
