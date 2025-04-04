@@ -168,10 +168,17 @@ function TournamentResults({ tournament, title = 'Tournament Results' }: Tournam
 
                                 return (
                                     <React.Fragment key={player.playerId}>
+                                        {index === 0 && (
+                                            <tr className="separator-row">
+                                                <td colSpan={showBonus ? 6 : 5} className="separator-cell">
+                                                    <span className="top-six-label">Gran Final</span>
+                                                </td>
+                                            </tr>
+                                        )}
                                         {showSeparator && rankings.length > 6 && (
                                             <tr className="separator-row">
                                                 <td colSpan={showBonus ? 6 : 5} className="separator-cell">
-                                                    <span className="top-six-label">Bottom {rankings.length - 6}</span>
+                                                    <span className="top-six-label">Final</span>
                                                 </td>
                                             </tr>
                                         )}
