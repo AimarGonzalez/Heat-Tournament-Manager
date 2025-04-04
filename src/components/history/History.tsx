@@ -179,8 +179,8 @@ function History() {
                                 <DropdownButton
                                     variant="outline-secondary"
                                     size="sm"
-                                    title={`Filter: ${filterOption === 'all' ? 'All' : filterOption === 'live' ? 'Live' : filterOption === 'simulation' ? 'Sim' : 'Archived'}`}
-                                    className="me-2"
+                                    title={`${window.innerWidth <= 576 ? '' : 'Filter: '}${filterOption === 'all' ? 'All' : filterOption === 'live' ? 'Live' : filterOption === 'simulation' ? 'Sim' : 'Arch'}`}
+                                    className="me-1"
                                 >
                                     <Dropdown.Item onClick={() => setFilterOption('all')}>All</Dropdown.Item>
                                     <Dropdown.Item onClick={() => setFilterOption('live')}>Live</Dropdown.Item>
@@ -190,7 +190,7 @@ function History() {
                                 <DropdownButton
                                     variant="outline-secondary"
                                     size="sm"
-                                    title={`Sort: ${sortOption === 'date' ? 'Date' : 'Name'}`}
+                                    title={`${window.innerWidth <= 576 ? '' : 'Sort: '}${sortOption === 'date' ? 'Date' : 'Name'}`}
                                 >
                                     <Dropdown.Item onClick={() => setSortOption('date')}>Date</Dropdown.Item>
                                     <Dropdown.Item onClick={() => setSortOption('name')}>Name</Dropdown.Item>

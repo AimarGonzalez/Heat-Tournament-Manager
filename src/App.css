@@ -4,6 +4,13 @@
   padding: 2rem;
 }
 
+/* Add media query for portrait orientation */
+@media (orientation: portrait) {
+  #root {
+    padding: 2px;
+  }
+}
+
 h1 {
   margin-bottom: 1.5rem;
   color: #2c3e50;
@@ -31,7 +38,7 @@ h2 {
 
 .nav-tabs .nav-link {
   font-weight: 500;
-  padding: 0.75rem 1.25rem;
+  padding: 8px 16px;
   border: 1px solid transparent;
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
@@ -48,7 +55,7 @@ h2 {
   border: 1px solid #ddd;
   border-top: none;
   border-radius: 0 0 4px 4px;
-  padding: 15px;
+  padding: 5px 2px;
   background-color: #fff;
 }
 
@@ -85,6 +92,7 @@ h2 {
 
 .card {
   padding: 0em;
+  margin-bottom: 10px;
 }
 
 .read-the-docs {
@@ -135,4 +143,99 @@ h2 {
 
 .data-manager-btn i {
   font-size: 1.2rem;
+}
+
+.tabs-container {
+  margin-top: 5px;
+}
+
+/* More aggressive padding reduction for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+
+  .col,
+  .col-1,
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8,
+  .col-9,
+  .col-10,
+  .col-11,
+  .col-12,
+  .col-sm-1,
+  .col-sm-2,
+  .col-sm-3,
+  .col-sm-4,
+  .col-sm-5,
+  .col-sm-6,
+  .col-sm-7,
+  .col-sm-8,
+  .col-sm-9,
+  .col-sm-10,
+  .col-sm-11,
+  .col-sm-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 576px) {
+  .sidebar-column, .content-column {
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .row {
+    margin-left: -2px;
+    margin-right: -2px;
+  }
+
+  .col,
+  .col-1,
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8,
+  .col-9,
+  .col-10,
+  .col-11,
+  .col-12,
+  .col-sm-1,
+  .col-sm-2,
+  .col-sm-3,
+  .col-sm-4,
+  .col-sm-5,
+  .col-sm-6,
+  .col-sm-7,
+  .col-sm-8,
+  .col-sm-9,
+  .col-sm-10,
+  .col-sm-11,
+  .col-sm-12 {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }

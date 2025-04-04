@@ -4,9 +4,9 @@
 
 /* Sidebar styling */
 .sidebar-column {
-    padding-right: 15px;
+    padding-right: 5px;
     border-right: 1px solid #e9ecef;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .tournament-list-card {
@@ -19,13 +19,13 @@
 }
 
 .tournament-list .list-group-item {
-    padding: 8px 12px;
+    padding: 6px 4px;
 }
 
 .tournament-info {
     flex: 1;
     overflow: hidden;
-    padding-right: 10px;
+    padding-right: 4px;
 }
 
 .tournament-name {
@@ -42,7 +42,7 @@
 
 /* Content area styling */
 .content-column {
-    padding-left: 15px;
+    padding-left: 5px;
     display: flex;
     flex-direction: column;
 }
@@ -107,16 +107,47 @@
     .sidebar-column {
         border-right: none;
         border-bottom: 1px solid #e9ecef;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        padding-right: 0;
+        padding-left: 0;
     }
 
-    .tournament-list-card {
-        height: auto;
+    .content-column {
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .tournament-list {
         max-height: 300px;
+    }
+}
+
+/* Even smaller screens */
+@media (max-width: 576px) {
+
+    .sidebar-column,
+    .content-column {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .tournament-container {
+        padding: 0;
+    }
+
+    .tournament-list .list-group-item {
+        padding: 5px 2px;
+    }
+
+    .tournament-nav .nav-link {
+        padding: 4px 6px;
+        font-size: 0.85rem;
+    }
+
+    .tournament-status {
+        padding: 1px, 4px;
+        font-size: 0.65rem;
     }
 }
 
@@ -155,4 +186,21 @@
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
+}
+
+
+
+/* Reduce all card paddings */
+.card-body {
+    padding: 0.5rem 0.5rem !important;
+}
+
+.card-header {
+    padding: 0.5rem 0.5rem !important;
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 0.0rem 0.0rem !important;
+    }
 }

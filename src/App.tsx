@@ -32,8 +32,8 @@ function App() {
   }, [autoRestorePerformed, clearAutoRestoreFlag])
 
   return (
-    <Container fluid className="mt-4">
-      <div className="mx-auto" style={{ maxWidth: '1600px' }}>
+    <Container fluid className="mt-2 px-0 px-sm-1">
+      <div className="mx-auto" style={{ maxWidth: '100%' }}>
         {showRestoreNotification && (
           <Alert
             variant="success"
@@ -80,17 +80,17 @@ function App() {
           fill
         >
           <Tab eventKey="liveTournaments" title="Live Tournaments">
-            <div className="p-3 tab-container">
+            <div className="p-1 tab-container">
               <LiveTournaments />
             </div>
           </Tab>
           <Tab eventKey="simulation" title="Simulation">
-            <div className="p-3 tab-container">
+            <div className="p-1 tab-container">
               <Simulation />
             </div>
           </Tab>
           <Tab eventKey="history" title="History">
-            <div className="p-3 tab-container">
+            <div className="p-1 tab-container">
               <History />
             </div>
           </Tab>

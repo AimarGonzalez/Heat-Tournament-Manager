@@ -143,15 +143,18 @@ function LiveTournaments() {
             <Row>
                 <Col lg={3} className="sidebar-column">
                     <Card className="tournament-list-card">
-                        <Card.Header>
+                        <Card.Header className="p-2 p-sm-3">
                             <div className="d-flex justify-content-between align-items-center">
-                                <span>Live Tournaments</span>
+                                <span className="d-none d-sm-inline">Live Tournaments</span>
+                                <span className="d-inline d-sm-none">Live</span>
                                 <Button
                                     variant="primary"
                                     size="sm"
                                     onClick={handleCreateNewTournament}
+                                    className="py-1 px-2 py-sm-1 px-sm-2"
                                 >
-                                    New Tournament
+                                    <span className="d-none d-sm-inline">New Tournament</span>
+                                    <span className="d-inline d-sm-none">New</span>
                                 </Button>
                             </div>
                         </Card.Header>

@@ -20,3 +20,28 @@
         padding-right: 10px;
     }
 }
+
+/* Add mobile optimizations */
+@media (max-width: 576px) {
+    .player-inscription-card .card-header {
+        padding: 0.5rem;
+    }
+    
+    .player-inscription-card .card-body {
+        padding: 0.75rem;
+    }
+    
+    .player-grid .col-md-6 {
+        padding-right: 6px;
+        padding-left: 6px;
+    }
+    
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}

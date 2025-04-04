@@ -4,6 +4,15 @@
     padding: 0.5rem;
 }
 
+@media (max-width: 576px) {
+    .tournament-results-table-container {
+        overflow-x: auto;
+        margin-bottom: 1rem;
+        padding: 0.0rem;
+    }
+}
+
+
 .tournament-results-table {
     position: relative;
     width: 100%;
@@ -77,13 +86,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 10px;
+    padding: 2px 6px;
     font-weight: 600;
     border-radius: 50px;
     font-size: 0.8rem;
     background-color: #f1f3f5;
     color: #95989b;
     transition: all 0.2s ease;
+    margin: 0;
 }
 
 .position-tag:hover {
@@ -100,7 +110,7 @@
 
 .rank-number {
     display: inline-block;
-    min-width: 24px;
+    min-width: 5px;
     text-align: right;
     margin-right: 2px;
 }
@@ -145,6 +155,14 @@
     display: inline-flex;
 }
 
+@media (orientation: portrait) {
+    .score-cell .position-tag {
+        margin-right: 0px;
+        min-width: 40px;
+        display: inline-flex;
+    }
+}
+
 .score-cell .points-display {
     display: inline-flex;
     min-width: 30px;
@@ -154,12 +172,13 @@
 /* Points display */
 .points-display {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 1px 4px;
     border-radius: 12px;
     font-size: 0.75rem;
     background-color: rgba(52, 58, 64, 0.05);
     color: #6c757d;
     margin-left: 4px;
+    margin: 0;
 }
 
 .points-cell,
@@ -210,4 +229,41 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     white-space: nowrap;
     pointer-events: none;
+}
+
+/* Media query for portrait orientation - smaller font size for tournament results */
+@media (orientation: portrait) {
+    .tournament-results-table {
+        font-size: 0.7rem;
+    }
+
+    .tournament-results-table thead th {
+        padding: 8px 8px;
+        font-size: 0.65rem;
+    }
+
+    .tournament-results-table tbody td {
+        padding: 2px 2px;
+    }
+
+    .position-tag {
+        font-size: 0.65rem;
+        padding: 1px 4px;
+        margin: 0;
+    }
+
+    .points-display {
+        font-size: 0.65rem;
+        padding: 1px 3px;
+        margin: 0;
+    }
+
+    .player-name {
+        font-size: 0.7rem;
+    }
+
+    .top-six-label {
+        font-size: 0.65rem;
+        padding: 1px 6px;
+    }
 }

@@ -1,5 +1,6 @@
 .history-container {
     margin-bottom: 2rem;
+    padding: 2px;
 }
 
 .search-container {
@@ -39,7 +40,7 @@
 }
 
 .tournament-history-container {
-    padding: 20px;
+    padding: 10px;
 }
 
 .history-card {
@@ -193,4 +194,95 @@
 
 .tournament-nav .nav-link {
     padding: 6px 12px;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 991px) {
+    .sidebar-column {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        padding-right: 10px;
+    }
+
+    .content-column {
+        padding-left: 10px;
+    }
+
+    .tournament-list {
+        max-height: 300px;
+    }
+}
+
+/* Even smaller screens */
+@media (max-width: 576px) {
+    .tournament-history-container {
+        padding: 5px;
+    }
+
+    .sidebar-column,
+    .content-column {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .tournament-list .list-group-item {
+        padding: 8px 6px;
+    }
+
+    /* Compact dropdown buttons */
+    .filter-sort-controls .dropdown-toggle {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    /* Smaller badges and tags */
+    .tournament-type-badge {
+        font-size: 0.7rem;
+        padding: 1px 3px;
+    }
+
+    .tournament-status {
+        padding: 1px 4px;
+        font-size: 0.65rem;
+    }
+
+    /* Reduce whitespace */
+    .tournament-nav .nav-link {
+        padding: 5px 8px;
+        font-size: 0.9rem;
+    }
+
+    .card-body {
+        padding: 0.5rem;
+    }
+
+    .card-header {
+        padding: 0.5rem;
+    }
+
+    .history-table .table th,
+    .history-table .table td {
+        padding: 2px;
+        font-size: 0.85rem;
+    }
+
+    .history-container {
+        padding: 0;
+    }
+}
+
+.history-filters {
+    margin-bottom: 10px;
+}
+
+/* Reduce card padding */
+.history-table .card {
+    margin-bottom: 10px;
+}
+
+.history-table .table th,
+.history-table .table td {
+    padding: 4px;
 }

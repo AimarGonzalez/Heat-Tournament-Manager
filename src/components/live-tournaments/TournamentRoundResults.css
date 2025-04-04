@@ -205,3 +205,29 @@ tr {
     padding: 0.25rem;
     color: #e6e6e6;
 }
+
+/* Media query for portrait orientation - smaller font size for round results */
+@media (orientation: portrait) {
+    .round-results-table {
+        font-size: 0.7rem;
+    }
+
+    .round-results-table th {
+        font-size: 0.65rem;
+        padding: 5px;
+    }
+
+    .round-results-table td {
+        padding: 5px;
+    }
+
+    .result-select {
+        font-size: 0.7rem;
+        padding: 2px;
+    }
+
+    .position-tag {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+}
