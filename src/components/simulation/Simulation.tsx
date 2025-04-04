@@ -10,6 +10,7 @@ import { useColorPickerContext } from '../../context/ColorPickerContext';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
 import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
 import './Simulation.css';
+import '../shared/TournamentDetailTabs.css';
 
 // Available colors for randomization
 const AVAILABLE_COLORS = [
@@ -386,15 +387,6 @@ function Simulation() {
 
     return (
         <div>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2>Tournament Simulation</h2>
-                {simulatedTournament && (
-                    <Button variant="outline-secondary" onClick={handleReset}>
-                        Run New Simulation
-                    </Button>
-                )}
-            </div>
-
             {errorMessage && (
                 <Alert variant="danger" onClose={() => setErrorMessage('')} dismissible>
                     {errorMessage}
@@ -403,9 +395,21 @@ function Simulation() {
 
             {simulatedTournament && (
                 <>
-                    <h3 className="mb-3">{simulatedTournament.name}</h3>
-                    <Card className="mb-3">
+                    <Card className="mb-2">
                         <Card.Body className="p-2">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <h6 className="mb-0 fw-bold">{simulatedTournament.name}</h6>
+                                {simulatedTournament && (
+                                    <Button variant="outline-secondary" size="sm" onClick={handleReset}>
+                                        Run New Simulation
+                                    </Button>
+                                )}
+                            </div>
+                        </Card.Body>
+                    </Card>
+
+                    <Card className="tournament-detail-tabs">
+                        <Card.Body>
                             <Nav variant="tabs" className="tournament-nav">
                                 {getAvailableViews().map(view => (
                                     <Nav.Item key={view.id}>
