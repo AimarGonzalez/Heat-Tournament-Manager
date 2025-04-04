@@ -1,13 +1,11 @@
 .tournament-container {
     margin: 0;
-    height: 100%;
 }
 
 /* Sidebar styling */
 .sidebar-column {
-    padding-right: 20px;
+    padding-right: 15px;
     border-right: 1px solid #e9ecef;
-    min-height: 100%;
     margin-bottom: 20px;
 }
 
@@ -16,8 +14,12 @@
 }
 
 .tournament-list {
-    max-height: calc(100vh - 180px);
+    max-height: 600px;
     overflow-y: auto;
+}
+
+.tournament-list .list-group-item {
+    padding: 8px 12px;
 }
 
 .tournament-info {
@@ -40,7 +42,7 @@
 
 /* Content area styling */
 .content-column {
-    padding-left: 20px;
+    padding-left: 15px;
     display: flex;
     flex-direction: column;
 }

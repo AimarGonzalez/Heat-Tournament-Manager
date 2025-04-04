@@ -139,7 +139,7 @@ function LiveTournaments() {
     };
 
     return (
-        <div className="tournament-container">
+        <div>
             <Row>
                 <Col lg={3} className="sidebar-column">
                     <Card className="tournament-list-card">

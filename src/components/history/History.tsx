@@ -169,34 +169,28 @@ function History() {
     };
 
     return (
-        <div className="tournament-container">
+        <div>
             <Row>
                 <Col lg={3} className="sidebar-column">
                     <Card className="tournament-list-card">
-                        <Card.Header>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <span>Tournament History</span>
-                                <div className="filter-sort-controls">
-                                    <DropdownButton
-                                        variant="outline-secondary"
-                                        size="sm"
-                                        title={`Filter: ${filterOption === 'all' ? 'All' : filterOption === 'live' ? 'Live' : filterOption === 'simulation' ? 'Simulation' : 'Archived'}`}
-                                        className="me-2"
-                                    >
-                                        <Dropdown.Item onClick={() => setFilterOption('all')}>All</Dropdown.Item>
-                                        <Dropdown.Item onClick={() => setFilterOption('live')}>Live</Dropdown.Item>
-                                        <Dropdown.Item onClick={() => setFilterOption('simulation')}>Simulation</Dropdown.Item>
-                                        <Dropdown.Item onClick={() => setFilterOption('archived')}>Archived</Dropdown.Item>
-                                    </DropdownButton>
-                                </div>
-                            </div>
-                        </Card.Header>
-                        <Card.Header className="bg-light p-2">
-                            <div className="d-flex justify-content-between align-items-center">
+                        <Card.Header className="d-flex justify-content-between align-items-center py-2">
+                            <span>Tournament History</span>
+                            <div className="d-flex">
                                 <DropdownButton
                                     variant="outline-secondary"
                                     size="sm"
-                                    title={`Sort by: ${sortOption === 'date' ? 'Date' : 'Name'}`}
+                                    title={`Filter: ${filterOption === 'all' ? 'All' : filterOption === 'live' ? 'Live' : filterOption === 'simulation' ? 'Sim' : 'Archived'}`}
+                                    className="me-2"
+                                >
+                                    <Dropdown.Item onClick={() => setFilterOption('all')}>All</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setFilterOption('live')}>Live</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setFilterOption('simulation')}>Simulation</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setFilterOption('archived')}>Archived</Dropdown.Item>
+                                </DropdownButton>
+                                <DropdownButton
+                                    variant="outline-secondary"
+                                    size="sm"
+                                    title={`Sort: ${sortOption === 'date' ? 'Date' : 'Name'}`}
                                 >
                                     <Dropdown.Item onClick={() => setSortOption('date')}>Date</Dropdown.Item>
                                     <Dropdown.Item onClick={() => setSortOption('name')}>Name</Dropdown.Item>
@@ -267,18 +261,18 @@ function History() {
                 <Col lg={9} className="content-column">
                     {selectedTournament ? (
                         <>
-                            <Card className="mb-3">
-                                <Card.Body className="p-3">
+                            <Card className="mb-2">
+                                <Card.Body className="p-2">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h5 className="mb-0">
+                                            <h6 className="mb-0 fw-bold">
                                                 {selectedTournament.name}
                                                 {selectedTournament.archived && <span className="archived-badge ms-2">(Archived)</span>}
-                                            </h5>
+                                            </h6>
                                             <div className="tournament-details-subtitle">
-                                                <span>{formatDate(selectedTournament.date)}</span>
-                                                <span className="mx-1">•</span>
-                                                <span>{selectedTournament.type === 'live' ? 'Live Tournament' : 'Simulation'}</span>
+                                                <small>{formatDate(selectedTournament.date)}</small>
+                                                <small className="mx-1">•</small>
+                                                <small>{selectedTournament.type === 'live' ? 'Live Tournament' : 'Simulation'}</small>
                                             </div>
                                         </div>
                                         {selectedTournament.archived && (
@@ -289,8 +283,7 @@ function History() {
                                                     restoreTournament(selectedTournament.id);
                                                 }}
                                             >
-                                                <i className="bi bi-arrow-counterclockwise me-1"></i>
-                                                Restore Tournament
+                                                <i className="bi bi-arrow-counterclockwise"></i>
                                             </Button>
                                         )}
                                     </div>
@@ -298,14 +291,15 @@ function History() {
                             </Card>
 
                             {/* Navigation tabs for tournament sections */}
-                            <Card className="mb-3">
-                                <Card.Body className="p-2">
+                            <Card className="mb-2">
+                                <Card.Body className="p-1">
                                     <Nav variant="tabs" className="tournament-nav">
                                         {getAvailableViews().map(view => (
                                             <Nav.Item key={view.id}>
                                                 <Nav.Link
                                                     active={activeTournamentView === view.id}
                                                     onClick={() => setActiveTournamentView(view.id as any)}
+                                                    className="py-1 px-3"
                                                 >
                                                     {view.label}
                                                 </Nav.Link>

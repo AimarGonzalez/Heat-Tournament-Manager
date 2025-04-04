@@ -116,9 +116,8 @@
 
 /* Tournament list card in sidebar */
 .sidebar-column {
-    padding-right: 20px;
+    padding-right: 15px;
     border-right: 1px solid #e9ecef;
-    min-height: 100vh;
     margin-bottom: 20px;
 }
 
@@ -128,7 +127,7 @@
 }
 
 .tournament-list {
-    max-height: calc(100vh - 250px);
+    max-height: 600px;
     overflow-y: auto;
 }
 
@@ -158,4 +157,40 @@
 .simulation-tournament .tournament-date,
 .simulation-tournament .tournament-winner {
     color: #8c8c8c;
+}
+
+.tournament-list .list-group-item {
+    padding: 8px 15px;
+}
+
+.tournament-list .tournament-date {
+    font-size: 0.75rem;
+    margin-top: 1px;
+}
+
+.tournament-list .tournament-winner {
+    font-size: 0.8rem;
+    margin-top: 1px;
+}
+
+.tournament-type-badge {
+    font-size: 0.75rem;
+    padding: 1px 4px;
+}
+
+.tournament-name-container {
+    margin-bottom: 2px;
+}
+
+.tournament-status {
+    padding: 1px 6px;
+    font-size: 0.7rem;
+}
+
+.detail-view-header .card-body {
+    padding: 10px 15px;
+}
+
+.tournament-nav .nav-link {
+    padding: 6px 12px;
 }
