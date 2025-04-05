@@ -8,7 +8,7 @@ import ColorSquare from '../live-tournaments/ColorSquare';
 import ColorCarPicker from '../shared/ColorCarPicker';
 import { useColorPickerContext } from '../../context/ColorPickerContext';
 import { calculatePointsFromPosition, calculateDifficultyBonus, calculateFinalBonuses } from '../../utils/tournamentUtils';
-import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
+import { CHARACTER_NAMES } from '../../config/constants';
 import './Simulation.css';
 import '../shared/TournamentDetailTabs.css';
 
@@ -38,32 +38,28 @@ function Simulation() {
         setTournamentName(`Simulation ${simulationCount + 1}`);
     }, [simulationCount]);
 
-    // Generate random dwarf names
+    // Generate random character names
     const generatePlayerNames = (count: number): string[] => {
         const names: string[] = [];
-        const usedFirstNames = new Set<string>();
-        const usedLastNames = new Set<string>();
+        const usedNames = new Set<string>();
 
         for (let i = 0; i < count; i++) {
             // Get available names
-            const availableFirstNames = DWARVEN_FIRST_NAMES.filter(name => !usedFirstNames.has(name));
-            const availableLastNames = DWARVEN_LAST_NAMES.filter(name => !usedLastNames.has(name));
+            const availableNames = CHARACTER_NAMES.filter(name => !usedNames.has(name));
 
             // If we've used all names, use a numbered name
-            if (availableFirstNames.length === 0 || availableLastNames.length === 0) {
-                names.push(`Dwarf ${i + 1}`);
+            if (availableNames.length === 0) {
+                names.push(`Player ${i + 1}`);
                 continue;
             }
 
-            // Pick random names from available pools
-            const firstName = availableFirstNames[Math.floor(Math.random() * availableFirstNames.length)];
-            const lastName = availableLastNames[Math.floor(Math.random() * availableLastNames.length)];
+            // Pick a random name from available pool
+            const characterName = availableNames[Math.floor(Math.random() * availableNames.length)];
 
-            // Mark names as used
-            usedFirstNames.add(firstName);
-            usedLastNames.add(lastName);
+            // Mark name as used
+            usedNames.add(characterName);
 
-            names.push(`${firstName} ${lastName}`);
+            names.push(characterName);
         }
 
         return names;

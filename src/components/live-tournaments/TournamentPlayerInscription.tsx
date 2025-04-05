@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player } from '../../models/types';
 import './TournamentPlayerInscription.css';
-import { DWARVEN_FIRST_NAMES, DWARVEN_LAST_NAMES } from '../../config/constants';
+import { CHARACTER_NAMES } from '../../config/constants';
 
 interface TournamentPlayerInscriptionProps {
     tournament: Tournament;
@@ -147,18 +147,15 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
         setPlayerNames(newPlayerNames);
     };
 
-    // Autofill empty player names with dwarven names
+    // Autofill empty player names with character names
     const handleAutofill = () => {
         const newPlayerNames = [...playerNames];
-        const usedFirstNames = new Set<string>();
-        const usedLastNames = new Set<string>();
+        const usedNames = new Set<string>();
 
         // Get already used names from non-empty slots
         newPlayerNames.forEach(name => {
             if (name && name.trim() !== '') {
-                const [firstName, lastName] = name.split(' ');
-                if (DWARVEN_FIRST_NAMES.includes(firstName)) usedFirstNames.add(firstName);
-                if (DWARVEN_LAST_NAMES.includes(lastName)) usedLastNames.add(lastName);
+                if (CHARACTER_NAMES.includes(name)) usedNames.add(name);
             }
         });
 
@@ -166,24 +163,21 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
         for (let i = 0; i < newPlayerNames.length; i++) {
             if (!newPlayerNames[i] || newPlayerNames[i].trim() === '') {
                 // Get available names
-                const availableFirstNames = DWARVEN_FIRST_NAMES.filter(name => !usedFirstNames.has(name));
-                const availableLastNames = DWARVEN_LAST_NAMES.filter(name => !usedLastNames.has(name));
+                const availableNames = CHARACTER_NAMES.filter(name => !usedNames.has(name));
 
-                // If we've used all names, regenerate the pools
-                if (availableFirstNames.length === 0 || availableLastNames.length === 0) {
-                    newPlayerNames[i] = `Dwarf ${i + 1}`;
+                // If we've used all names, use a numbered name
+                if (availableNames.length === 0) {
+                    newPlayerNames[i] = `Player ${i + 1}`;
                     continue;
                 }
 
-                // Pick random names from available pools
-                const firstName = availableFirstNames[Math.floor(Math.random() * availableFirstNames.length)];
-                const lastName = availableLastNames[Math.floor(Math.random() * availableLastNames.length)];
+                // Pick a random name from available pool
+                const characterName = availableNames[Math.floor(Math.random() * availableNames.length)];
 
-                // Mark names as used
-                usedFirstNames.add(firstName);
-                usedLastNames.add(lastName);
+                // Mark name as used
+                usedNames.add(characterName);
 
-                newPlayerNames[i] = `${firstName} ${lastName}`;
+                newPlayerNames[i] = characterName;
             }
         }
 
@@ -203,7 +197,7 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
                         borderColor: '#fd7e14'
                     }}
                 >
-                    <i className="bi bi-magic me-1"></i> Autofill with Dwarven Names
+                    <i className="bi bi-magic me-1"></i> Autofill player names
                 </Button>
             </Card.Header>
             <Card.Body>

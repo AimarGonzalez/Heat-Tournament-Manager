@@ -11,17 +11,33 @@ export const DEFAULT_ROUNDS_COUNT = 2;
 // Scoring values
 export const POSITION_POINTS = [9, 6, 4, 3, 2, 1];
 
-// Dwarven name lists for the generator
-export const DWARVEN_FIRST_NAMES = [
-    'Thorin', 'Balin', 'Dwalin', 'Fili', 'Kili', 'Bombur', 'Bofur', 'Bifur', 'Gloin', 'Oin',
-    'Dori', 'Nori', 'Ori', 'Gimli', 'Durin', 'Thrain', 'Thror', 'Dain', 'Borin', 'Fundin'
-];
-
-export const DWARVEN_LAST_NAMES = [
-    'Escudoroble', 'Piedrohierro', 'Yelmorocoso', 'Manomartillo', 'Barbafuego', 'Barbalarga',
-    'Barbadura', 'Puñoroca', 'Puñopiedra', 'Martillobatalla', 'Forjahierro', 'Barbaoro',
-    'Hachaplatino', 'Mantorecio', 'Excavaprofundo', 'Yunquemar', 'Barbafuego', 'Miradacero',
-    'Guardamontaña', 'Cerraduranegra'
+// Lord of the Rings character names in Spanish
+export const CHARACTER_NAMES = [
+    'Frodo Bolsón',
+    'Gandalf el Gris',
+    'Aragorn',
+    'Legolas',
+    'Gimli',
+    'Boromir',
+    'Sauron',
+    'El ojo que todo lo ve',
+    'Gollum',
+    'Bilbo Bolsón',
+    'Saruman el Blanco',
+    'Elrond',
+    'Galadriel',
+    'Arwen',
+    'Rey Théoden',
+    'Éowyn',
+    'Faramir',
+    'Pippin',
+    'Merry',
+    'Samsagaz Gamyi',
+    'Balrog',
+    'Sauron',
+    'Trancos',
+    'Orco de Mordor',
+    'Tom Bombadil'
 ];
 
 // Random player name generation
