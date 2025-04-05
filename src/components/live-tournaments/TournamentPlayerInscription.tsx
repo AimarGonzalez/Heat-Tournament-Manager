@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col, CardBody } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../context/AppContext';
 import { Tournament, Player } from '../../models/types';
@@ -208,45 +208,52 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
             </Card.Header>
             <Card.Body>
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    <Form.Label className="section-header mb-2">Tournament Name</Form.Label>
-                    <Row>
-                        <Col md={6} lg={4}>
-                            <Form.Group className="mb-4">
-                                <Form.Control
-                                    type="text"
-                                    value={tournamentName}
-                                    onChange={(e) => setTournamentName(e.target.value)}
-                                    required
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Please provide a tournament name.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Form.Label className="section-header mb-2">Player Names</Form.Label>
-
-                    <div className="player-grid">
-                        <Row className="g-3">
-                            {Array.from({ length: 12 }).map((_, index) => (
-                                <Col key={index} md={6} lg={4}>
+                    <Card className="mb-4">
+                        <CardBody>
+                            <Form.Label className="section-header mb-2">Tournament Name</Form.Label>
+                            <Row>
+                                <Col md={6} lg={4}>
                                     <Form.Group>
                                         <Form.Control
                                             type="text"
-                                            value={playerNames[index] || ''}
-                                            onChange={(e) => handleNameChange(index, e.target.value)}
-                                            placeholder={`Enter name for player ${index + 1}`}
+                                            value={tournamentName}
+                                            onChange={(e) => setTournamentName(e.target.value)}
                                             required
                                         />
                                         <Form.Control.Feedback type="invalid">
-                                            Please provide a name for player {index + 1}.
+                                            Please provide a tournament name.
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
-                            ))}
-                        </Row>
-                    </div>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardBody>
+                            <Form.Label className="section-header mb-2">Player Names</Form.Label>
+
+                            <div className="player-grid">
+                                <Row className="g-3">
+                                    {Array.from({ length: 12 }).map((_, index) => (
+                                        <Col key={index} md={6} lg={4}>
+                                            <Form.Group>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={playerNames[index] || ''}
+                                                    onChange={(e) => handleNameChange(index, e.target.value)}
+                                                    placeholder={`Enter name for player ${index + 1}`}
+                                                    required
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    Please provide a name for player {index + 1}.
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            </div>
+                        </CardBody>
+                    </Card>
 
                     <div className="d-grid gap-2 mt-4">
                         <Button type="submit" variant="primary" size="lg">
