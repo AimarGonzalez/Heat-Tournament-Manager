@@ -219,3 +219,7 @@ tr {
         padding: 2px 6px;
     }
 }
+
+.playing-table-card{
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}

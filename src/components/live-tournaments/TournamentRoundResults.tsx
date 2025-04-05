@@ -488,7 +488,7 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
                 <Row>
                     {tables.map((table, tableIndex) => (
                         <Col md={6} key={table.tableId} className="mb-4">
-                            <Card>
+                            <Card className="playing-table-card">
                                 <Card.Header>Table {tableIndex + 1}</Card.Header>
                                 <Card.Body className="table-responsive">
                                     <Table bordered hover className="round-results-table">
