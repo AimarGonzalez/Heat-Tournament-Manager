@@ -246,11 +246,6 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
             playerColors: [...table.playerColors]
         }));
 
-        // Count empty slots in each table
-        const table1EmptySlots = newTables[0].playerSlots.filter(p => p === null).length;
-        const table2EmptySlots = newTables[1].playerSlots.filter(p => p === null).length;
-
-        // Distribute unassigned players to empty slots
         let playerIndex = 0;
 
         // Fill table 1 empty slots
@@ -268,7 +263,7 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
         }
 
         // For each table, fill empty positions with random available positions
-        newTables.forEach((table, tableIndex) => {
+        newTables.forEach(table => {
             const usedPositions = new Set(table.positions.filter(p => p !== null));
             const availablePositions = [1, 2, 3, 4, 5, 6].filter(p => !usedPositions.has(p));
 
