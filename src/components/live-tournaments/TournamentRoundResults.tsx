@@ -227,81 +227,85 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
 
     // Randomly assign players to tables and positions
     const handleRandomize = () => {
-        // Make a copy of all player IDs and shuffle them
-        const playerIds = [...tournament.players.map(p => p.id)];
-        for (let i = playerIds.length - 1; i > 0; i--) {
+        // Get all unassigned players
+        const unassignedPlayers = tournament.players
+            .map(p => p.id)
+            .filter(id => !tables.some(table => table.playerSlots.includes(id)));
+
+        // Shuffle unassigned players
+        for (let i = unassignedPlayers.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [playerIds[i], playerIds[j]] = [playerIds[j], playerIds[i]];
+            [unassignedPlayers[i], unassignedPlayers[j]] = [unassignedPlayers[j], unassignedPlayers[i]];
         }
 
-        // Split the shuffled players into two tables
-        const table1Players = playerIds.slice(0, 6);
-        const table2Players = playerIds.slice(6, 12);
+        // Create new tables array preserving existing assignments
+        const newTables = tables.map(table => ({
+            ...table,
+            playerSlots: [...table.playerSlots],
+            positions: [...table.positions],
+            playerColors: [...table.playerColors]
+        }));
 
-        // Generate random positions for each table
-        const getRandomPositions = () => {
-            const positions = [1, 2, 3, 4, 5, 6];
-            for (let i = positions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [positions[i], positions[j]] = [positions[j], positions[i]];
+        // Count empty slots in each table
+        const table1EmptySlots = newTables[0].playerSlots.filter(p => p === null).length;
+        const table2EmptySlots = newTables[1].playerSlots.filter(p => p === null).length;
+
+        // Distribute unassigned players to empty slots
+        let playerIndex = 0;
+
+        // Fill table 1 empty slots
+        for (let i = 0; i < newTables[0].playerSlots.length && playerIndex < unassignedPlayers.length; i++) {
+            if (newTables[0].playerSlots[i] === null) {
+                newTables[0].playerSlots[i] = unassignedPlayers[playerIndex++];
             }
-            return positions;
-        };
+        }
 
-        // Generate random colors for each table while preserving existing selections
-        const getRandomColorsPreservingExisting = (existingColors: Array<string | null>) => {
-            // Keep track of already used colors in this table
-            const usedColors = new Set(existingColors.filter(Boolean));
+        // Fill table 2 empty slots
+        for (let i = 0; i < newTables[1].playerSlots.length && playerIndex < unassignedPlayers.length; i++) {
+            if (newTables[1].playerSlots[i] === null) {
+                newTables[1].playerSlots[i] = unassignedPlayers[playerIndex++];
+            }
+        }
 
-            // Create a copy of the existing colors to preserve them
-            const newColors = [...existingColors];
+        // For each table, fill empty positions with random available positions
+        newTables.forEach((table, tableIndex) => {
+            const usedPositions = new Set(table.positions.filter(p => p !== null));
+            const availablePositions = [1, 2, 3, 4, 5, 6].filter(p => !usedPositions.has(p));
 
-            // Get all available colors that aren't already used
+            // Shuffle available positions
+            for (let i = availablePositions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [availablePositions[i], availablePositions[j]] = [availablePositions[j], availablePositions[i]];
+            }
+
+            // Fill empty position slots
+            let posIndex = 0;
+            for (let i = 0; i < table.positions.length; i++) {
+                if (table.positions[i] === null && posIndex < availablePositions.length) {
+                    table.positions[i] = availablePositions[posIndex++];
+                }
+            }
+
+            // Fill empty color slots with random available colors
+            const usedColors = new Set(table.playerColors.filter(c => c !== null));
             const availableColorValues = availableColors
                 .map(c => c.value)
                 .filter(color => !usedColors.has(color));
 
-            // Shuffle the remaining available colors
-            const shuffledRemainingColors = [...availableColorValues];
-            for (let i = shuffledRemainingColors.length - 1; i > 0; i--) {
+            // Shuffle available colors
+            for (let i = availableColorValues.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [shuffledRemainingColors[i], shuffledRemainingColors[j]] =
-                    [shuffledRemainingColors[j], shuffledRemainingColors[i]];
+                [availableColorValues[i], availableColorValues[j]] = [availableColorValues[j], availableColorValues[i]];
             }
 
-            // Assign random colors only to positions that don't already have a color
+            // Fill empty color slots
             let colorIndex = 0;
-            for (let i = 0; i < newColors.length; i++) {
-                if (!newColors[i] && colorIndex < shuffledRemainingColors.length) {
-                    newColors[i] = shuffledRemainingColors[colorIndex++];
+            for (let i = 0; i < table.playerColors.length; i++) {
+                if (table.playerColors[i] === null && colorIndex < availableColorValues.length) {
+                    table.playerColors[i] = availableColorValues[colorIndex++];
                 }
             }
-
-            return newColors;
-        };
-
-        const table1Positions = getRandomPositions();
-        const table2Positions = getRandomPositions();
-
-        // Preserve existing color selections and randomize only the unassigned ones
-        const table1Colors = getRandomColorsPreservingExisting(tables[0].playerColors);
-        const table2Colors = getRandomColorsPreservingExisting(tables[1].playerColors);
-
-        // Create new tables with random assignments
-        const newTables: TableAssignment[] = [
-            {
-                tableId: 'table1',
-                playerSlots: table1Players,
-                positions: table1Positions,
-                playerColors: table1Colors
-            },
-            {
-                tableId: 'table2',
-                playerSlots: table2Players,
-                positions: table2Positions,
-                playerColors: table2Colors
-            }
-        ];
+        });
 
         setTables(newTables);
     };
