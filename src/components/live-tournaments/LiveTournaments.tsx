@@ -242,38 +242,46 @@ function LiveTournaments() {
                             </Card>
 
                             {activeTournamentView === 'inscription' && (
-                                <TournamentPlayerInscription
-                                    key={`inscription-${activeTournament.id}`}
-                                    tournament={activeTournament}
-                                    onComplete={() => setActiveTournamentView('round1')}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentPlayerInscription
+                                        key={`inscription-${activeTournament.id}`}
+                                        tournament={activeTournament}
+                                        onComplete={() => setActiveTournamentView('round1')}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'round1' && (
-                                <TournamentRoundResults
-                                    key={`round1-${activeTournament.id}`}
-                                    tournament={activeTournament}
-                                    roundNumber={1}
-                                    onComplete={() => setActiveTournamentView('round2')}
-                                    isEdit={activeTournament.rounds.length >= 1}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentRoundResults
+                                        key={`round1-${activeTournament.id}`}
+                                        tournament={activeTournament}
+                                        roundNumber={1}
+                                        onComplete={() => setActiveTournamentView('round2')}
+                                        isEdit={activeTournament.rounds.length >= 1}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'round2' && (
-                                <TournamentRoundResults
-                                    key={`round2-${activeTournament.id}`}
-                                    tournament={activeTournament}
-                                    roundNumber={2}
-                                    onComplete={() => setActiveTournamentView('results')}
-                                    isEdit={activeTournament.rounds.length >= 2}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentRoundResults
+                                        key={`round2-${activeTournament.id}`}
+                                        tournament={activeTournament}
+                                        roundNumber={2}
+                                        onComplete={() => setActiveTournamentView('results')}
+                                        isEdit={activeTournament.rounds.length >= 2}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'results' && (
-                                <TournamentResultsTable
-                                    key={`results-${activeTournament.id}`}
-                                    tournament={activeTournament}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentResultsTable
+                                        key={`results-${activeTournament.id}`}
+                                        tournament={activeTournament}
+                                    />
+                                </div>
                             )}
                         </>
                     ) : (

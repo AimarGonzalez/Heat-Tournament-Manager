@@ -460,8 +460,8 @@ function TournamentRoundResults({ tournament, roundNumber, onComplete, isEdit = 
     // Auto-save to draft as changes are made - DISABLED to fix infinite update loop
 
     return (
-        <Card>
-            <Card.Header className="d-flex justify-content-between align-items-center">
+        <Card className="tournament-selected-card">
+            <Card.Header className="d-flex justify-content-between align-items-center tournament-selected-header">
                 <span>{isEdit ? `Edit Round ${roundNumber} Results` : `Round ${roundNumber} Results`}</span>
                 <Button
                     variant="outline-primary"

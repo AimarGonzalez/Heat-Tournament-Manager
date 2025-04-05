@@ -69,12 +69,6 @@ tr {
     padding-left: 0.25rem;
 }
 
-/* Remove margin from last column */
-.col:last-child,
-[class*="col-"]:last-child {
-    padding-right: 0;
-}
-
 /* Adjust row margins */
 .row {
     margin-right: 0;

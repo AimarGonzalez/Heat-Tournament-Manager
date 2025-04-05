@@ -191,8 +191,8 @@ function TournamentPlayerInscription({ tournament, onComplete }: TournamentPlaye
     };
 
     return (
-        <Card className="player-inscription-card">
-            <Card.Header className="d-flex justify-content-between align-items-center">
+        <Card className="player-inscription-card tournament-selected-card">
+            <Card.Header className="d-flex justify-content-between align-items-center tournament-selected-header">
                 <span>{isEditing ? 'Player Inscription' : 'Edit Tournament Details'}</span>
                 <Button
                     variant="outline-warning"

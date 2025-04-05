@@ -362,8 +362,8 @@ function Simulation() {
                 );
             case 'round1':
                 return (
-                    <Card>
-                        <Card.Header>Round 1 Results</Card.Header>
+                    <Card className="tournament-selected-card">
+                        <Card.Header className="tournament-selected-header">Round 1 Results</Card.Header>
                         <Card.Body>
                             {renderRoundTable(1)}
                         </Card.Body>
@@ -371,8 +371,8 @@ function Simulation() {
                 );
             case 'round2':
                 return (
-                    <Card>
-                        <Card.Header>Round 2 Results</Card.Header>
+                    <Card className="tournament-selected-card">
+                        <Card.Header className="tournament-selected-header">Round 2 Results</Card.Header>
                         <Card.Body>
                             {renderRoundTable(2)}
                         </Card.Body>

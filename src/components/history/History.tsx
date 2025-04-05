@@ -349,38 +349,46 @@ function History() {
                             </Card>
 
                             {activeTournamentView === 'inscription' && (
-                                <TournamentPlayerInscription
-                                    key={`inscription-${selectedTournament.id}`}
-                                    tournament={selectedTournament}
-                                    onComplete={() => setActiveTournamentView('round1')}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentPlayerInscription
+                                        key={`inscription-${selectedTournament.id}`}
+                                        tournament={selectedTournament}
+                                        onComplete={() => setActiveTournamentView('round1')}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'round1' && (
-                                <TournamentRoundResults
-                                    key={`round1-${selectedTournament.id}`}
-                                    tournament={selectedTournament}
-                                    roundNumber={1}
-                                    onComplete={() => setActiveTournamentView('round2')}
-                                    isEdit={selectedTournament.rounds.length >= 1}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentRoundResults
+                                        key={`round1-${selectedTournament.id}`}
+                                        tournament={selectedTournament}
+                                        roundNumber={1}
+                                        onComplete={() => setActiveTournamentView('round2')}
+                                        isEdit={selectedTournament.rounds.length >= 1}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'round2' && (
-                                <TournamentRoundResults
-                                    key={`round2-${selectedTournament.id}`}
-                                    tournament={selectedTournament}
-                                    roundNumber={2}
-                                    onComplete={() => setActiveTournamentView('results')}
-                                    isEdit={selectedTournament.rounds.length >= 2}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentRoundResults
+                                        key={`round2-${selectedTournament.id}`}
+                                        tournament={selectedTournament}
+                                        roundNumber={2}
+                                        onComplete={() => setActiveTournamentView('results')}
+                                        isEdit={selectedTournament.rounds.length >= 2}
+                                    />
+                                </div>
                             )}
 
                             {activeTournamentView === 'results' && (
-                                <TournamentResultsTable
-                                    key={`results-${selectedTournament.id}`}
-                                    tournament={selectedTournament}
-                                />
+                                <div className="tournament-detail-content">
+                                    <TournamentResultsTable
+                                        key={`results-${selectedTournament.id}`}
+                                        tournament={selectedTournament}
+                                    />
+                                </div>
                             )}
                         </>
                     ) : (

@@ -42,10 +42,40 @@
     color: #495057;
 }
 
+/* Content panel under tabs */
+.tournament-detail-content {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: -1px;
+    border-top: 1px solid #dee2e6;
+}
+
+.tournament-detail-content .card-header {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.tournament-detail-content .card-body {
+    padding: 0.5em;
+}
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
     .tournament-detail-tabs .nav-link {
         padding: 6px 12px;
         font-size: 0.85rem;
     }
+}
+
+
+.tournament-selected-card {
+    border-radius: 0px 0px 12px 12px;
+}
+
+.tournament-selected-header {
+    border-radius: 0px !important;
+    background-color: #dfecff !important;
 }
