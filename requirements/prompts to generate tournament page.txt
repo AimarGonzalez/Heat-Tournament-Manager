@@ -1,0 +1,87 @@
+I'm an organization hosting tournament events of a racing game named HEAT (we play the board game Heat player to the metal).
+
+Every tournament has the same format. There are 12 players, divided into 2 tables playing HEAT.
+
+We will play 2 rounds of games. In each round, there are 6 players at each table. Each player will play a total of 2 games. In each game, we randomly assign which players go to each table. At the end of each game, each player receives their points, as you described before (9-6-4-3-2-1).
+
+
+I need you to create an app that will simulate a tournament results. Every time I press a "Generate Tournament" button, i want to be presented with the results of the tournament in the following format:
+
+Results table Format:
+- The table has 4 columns: Name, 1s Round, 2nd Round, Total
+Name- the player name.
+1s Round. The position and score for the 1st round ex: 1st (9p)
+2nd Round. The position and score for 2nd round ex: 1st (9p)
+Total. The added points of the two rounds.
+- I want the text in the "Round Points" column to have a background color according to the position: 1st (blue), 2nd (green), 3rd (yellow), 4th (red). (The rest without color)
+- I want you to mark the separation between the top 6 and the bottom 6 in the final table with a thick line.
+FORMAT END
+
+CONSIDERATIONS: Don't make up the values in the table. Its a portant that every time the user asks for a simulation the app really runs the simulation assigning positions to the players and its points. 
+
+APP SECTIONS: The app has 2 sections. The main one to run a new simulation. And a secondary one, where I can check history of the previous tournament results.
+
+Ask if you have any other question.
+
+
+----------
+
+Ties are allowed. All players with the same score will share a position in the Results table classification. (even though they are represented in separate rows)
+
+Also every player will have now a Mastery score, which is their total score divided by 100. (this info doesn't need to be displayed in the table)
+
+And we will introduce a tie breaker system. At the end of the 2nd round players will recieve a Difficulty bonus, based on the mastery of their rivals. The difficulty bonus awarded is, for each round, a bonus equal to the added Mastery of the rivals in the table.
+
+Please update the app, using the bonus as a tiebreaker.
+In case of a tie, still keep the displayed ordinal number, but sort players using the calculated Difficulty bonus.
+
+----------
+
+Finally. I want to run a real tournament. Please create a new section of the app, where I can start a new tournament. After starting a tournament the app will request the names of 12 players.
+
+After this there is a button to start round1.
+
+Conducting Round 1:
+For every player the app will let me introduce the table where they played (A or B) and their final position. 
+I want to submit the results with a button.
+After submitting I will be presented with a provisional results table. Under the table there is a continue to 2nd round button.
+
+Conducting Round 2:
+For every player the app will let me introduce the table where they played (A or B) and their final position. 
+I want to submit the results with a button.
+After submitting I will be presented with the final results table.
+
+-------
+
+The ux for the live torunament should be as follows.
+
+1st screen: "Player Inscription" view. This is to insert player names. Show a view with 12 text slots to input the user names.
+
+2nd screen: "Submit Round 1 Results" view. Show 2 panels, each representing a table, every table has 6 slots. For every slot, there is a selector to chose what player is assigned to this slot. And another selector to input their final position (1-6). It has a submit button which will submit the sitting and results of the round.
+
+3rd screen: "Submit Round 2 Results" view. Show 2 panels, each representing a table, every table has 6 slots. For every slot, there is a selector to chose what player is assigned to this slot. And another selector to input their final position (1-6). It has a submit button which will submit the sitting and results of the round.
+
+After submitting the results of each round. Show a preliminar results table. Where ties are allowed.
+
+If there are any tie, show the button to calculate the Difficulty bonus. Which is calculated as I described before.
+- First calculate the Mastery score for each player: total points / 100.
+- Then calculate the Difficulty bonuses. Difficulty bonus for a given player is the aggregation of, for each rival, count how many times the player has played against that rival and multiply it by the rival Mastery score.
+
+---
+Tabs should be in this order: Live Tournament | Simulator | History 
+
+When I switch tabs, their state should be kept, so I see the same when I go back to a tab.
+
+The format of the results table needs changes:
+- I need a first column with the row number (starting 1 to 12)
+- There should be a bold horizontal line between the 6th and 7th row.
+- The "calculate difficulty bonus" button should instead be a toggle button to show/hide the difficulty bonus (which should be pre-calculated already)
+
+---
+2 things:
+
+1-The live tournament state needs to be keept. When I change tabs the state of the current live torunament needs to be kept (instead of reseting to Player inscription. So when I go back to the tab I see the same tournament in the same state. If I need to start a new live tournament I will press a new button next to the Live Tournament title.
+
+2-In the History tab, the current Tournament Results table needs more horizontal space to be complete visible.
+
+
