@@ -13,7 +13,13 @@ HEAT Tournament Manager is a web application designed to manage tournaments for 
 
 ## 🎮 Live Application
 
-**Try it now**: [HEAT Tournament Manager](https://your-username.github.io/HEAT-Tournament-Manager/) *(URL to be inserted)*
+**Try it now**: [HEAT Tournament Manager](https://your-username.github.io/HEAT-Tournament-Manager/)
+
+<div style="display: flex; justify-content: space-around;">
+  <img src="./src/assets/screenshots/tournament-manager-screenshot-1.png" alt="Screenshot 1" style="width: 45%; height: auto;" />
+  <img src="./src/assets/screenshots/tournament-manager-screenshot-2.png" alt="Screenshot 2" style="width: 45%; height: auto;" />
+</div>
+
 
 ## ✨ Features
 
@@ -34,7 +40,7 @@ HEAT Tournament Manager supports the following tournament structure:
 - Difficulty bonus based on opponent mastery scores
 - Final ranking based on total points + difficulty bonuses
 
-## 🛠️ Installation and Setup
+## 🛠️ Testing and deploying
 
 1. Clone the repository
    ```bash
@@ -57,7 +63,7 @@ HEAT Tournament Manager supports the following tournament structure:
    npm run build
    ```
 
-## 🧰 Technologies Used
+## 🧰 Technologies
 
 - React 18
 - TypeScript
